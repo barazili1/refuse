@@ -6,7 +6,6 @@ import { SplashScreen } from './components/SplashScreen';
 import { SelectionScreen } from './components/SelectionScreen';
 import { Conditions } from './components/Conditions';
 import { ViewState, AccessKey, Language, Platform } from './types';
-import { translations } from './translations';
 import { playSound } from './services/audio';
 
 const MotionDiv = motion.div as any;
@@ -23,28 +22,23 @@ export const App: React.FC = () => {
   const [accessKeyData, setAccessKeyData] = useState<AccessKey | null>(() => {
       try {
           const saved = localStorage.getItem('access_key_data');
-          return saved ? JSON.parse(saved) : {
-            key: 'GUEST_000',
-            isActive: true,
-            type: 'SESSION',
-            createdAt: Date.now(),
-            isAdminMode: false
-          };
-      } catch { 
-          return {
-            key: 'GUEST_000',
-            isActive: true,
-            type: 'SESSION',
-            createdAt: Date.now(),
-            isAdminMode: false
-          }; 
-      }
+          if (saved) return JSON.parse(saved);
+      } catch (e) { console.error("Local storage error", e); }
+      
+      return {
+        key: '8963007529',
+        isActive: true,
+        type: 'SESSION',
+        createdAt: Date.now(),
+        isAdminMode: false
+      };
   });
 
-  // Persist accessKeyData changes
   useEffect(() => {
     if (accessKeyData) {
-      localStorage.setItem('access_key_data', JSON.stringify(accessKeyData));
+      try {
+        localStorage.setItem('access_key_data', JSON.stringify(accessKeyData));
+      } catch (e) { console.error("Failed to save ID", e); }
     }
   }, [accessKeyData]);
 
@@ -84,7 +78,6 @@ export const App: React.FC = () => {
   const handleSignOut = () => {
     playSound('click');
     localStorage.removeItem('selected_platform');
-    // We keep the accessKeyData so the ID persists unless explicitly reset
     setView('SELECTION');
   };
 
