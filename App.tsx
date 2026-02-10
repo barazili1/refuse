@@ -22,8 +22,13 @@ export const App: React.FC = () => {
   const [accessKeyData, setAccessKeyData] = useState<AccessKey | null>(() => {
       try {
           const saved = localStorage.getItem('access_key_data');
-          if (saved) return JSON.parse(saved);
-      } catch (e) { console.error("Local storage error", e); }
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed && parsed.key) return parsed;
+          }
+      } catch (e) { 
+        console.warn("Storage reading error, using default guest ID"); 
+      }
       
       return {
         key: '8963007529',
@@ -34,17 +39,21 @@ export const App: React.FC = () => {
       };
   });
 
+  // Keep localStorage in sync with current state
   useEffect(() => {
     if (accessKeyData) {
       try {
         localStorage.setItem('access_key_data', JSON.stringify(accessKeyData));
-      } catch (e) { console.error("Failed to save ID", e); }
+      } catch (e) {
+        console.error("Failed to persist ID", e);
+      }
     }
   }, [accessKeyData]);
 
   const [view, setView] = useState<ViewState>(() => {
     try {
         const saved = localStorage.getItem('selected_platform');
+        // If they already picked a platform, jump to the game, else selection
         return saved ? 'APPLE' : 'SELECTION';
     } catch { return 'SELECTION'; }
   });
