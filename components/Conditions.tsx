@@ -14,7 +14,8 @@ import {
     ChevronLeft,
     Globe,
     Image,
-    Hexagon
+    Hexagon,
+    Zap
 } from 'lucide-react';
 import { Language, Platform } from '../types';
 import { playSound } from '../services/audio';
@@ -45,7 +46,7 @@ const RainEffect: React.FC = () => {
           initial={{ y: -200 }}
           animate={{ y: '110vh' }}
           transition={{ duration: drop.duration, repeat: Infinity, ease: "linear", delay: drop.delay }}
-          className="absolute bg-gradient-to-b from-red-600/0 via-red-600/40 to-red-600/0 w-[1px]"
+          className="absolute bg-gradient-to-b from-lime-600/0 via-lime-600/40 to-lime-600/0 w-[1px]"
           style={{ left: `${drop.left}%`, height: `${drop.height}px`, opacity: drop.opacity }}
         />
       ))}
@@ -60,8 +61,8 @@ export const Conditions: React.FC<{
     onLanguageChange: (lang: Language) => void; 
     platform: Platform; 
 }> = ({ onComplete, onBack, language, onLanguageChange, platform }) => {
-    const t = translations[language];
     const isRtl = language === 'ar';
+    const t = translations[language];
     const [copied, setCopied] = useState(false);
     const [userId, setUserId] = useState('');
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -70,7 +71,6 @@ export const Conditions: React.FC<{
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [overallProgress, setOverallProgress] = useState(0);
     const [statusText, setStatusText] = useState("UPLINK_INITIALIZING");
-    const [currentStep, setCurrentStep] = useState(0);
 
     const platformImg = platform === '1XBET' 
         ? 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766500879248-4e7a13ac-b97d-4a9b-8d80-8ed58e40c847.jpeg'
@@ -83,9 +83,6 @@ export const Conditions: React.FC<{
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
-
-    const nextStep = () => { if (currentStep < 3) { playSound('click'); setCurrentStep(prev => prev + 1); } };
-    const prevStep = () => { if (currentStep > 0) { playSound('click'); setCurrentStep(prev => prev - 1); } };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -138,76 +135,263 @@ export const Conditions: React.FC<{
     };
 
     return (
-        <MotionDiv initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={`flex flex-col h-full bg-black relative overflow-hidden ${isRtl ? 'font-ar' : 'font-en'}`}>
+        <MotionDiv initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={`flex flex-col h-full bg-[#050505] relative overflow-hidden ${isRtl ? 'font-ar' : 'font-en'}`}>
             <RainEffect />
-            <MotionDiv dir="ltr" className="fixed top-0 left-0 right-0 h-16 bg-black border-b border-white/5 flex items-center justify-between px-6 z-[100] shadow-[0_4px_30px_rgba(0,0,0,0.8)]">
-                <div className="flex items-center gap-3">
-                    {onBack && <button onClick={() => { playSound('click'); onBack(); }} className="p-1 text-zinc-500 hover:text-white transition-colors"><ChevronLeft className="w-6 h-6" /></button>}
-                    <h1 className="text-[12px] font-black text-white tracking-[0.3em] uppercase italic">DRAGON <span className="text-red-600">VIP</span></h1>
-                </div>
-                <button onClick={() => { playSound('toggle'); onLanguageChange(language === 'en' ? 'ar' : 'en'); }} className="h-10 px-4 rounded-xl bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-tighter flex items-center gap-2"><Globe className="w-4 h-4 text-red-600" />{language === 'en' ? 'AR' : 'EN'}</button>
-            </MotionDiv>
-            <div className="pt-28 px-8 mb-8 relative z-10">
-                <div className="flex items-center justify-between max-w-sm mx-auto relative px-2">
-                    <div className="absolute top-1/2 left-4 right-4 h-[1px] bg-zinc-900 -translate-y-1/2 z-0" />
-                    <MotionDiv initial={{ width: 0 }} animate={{ width: `${(currentStep / 3) * 100}%` }} className="absolute top-1/2 left-4 h-[1px] bg-red-600 -translate-y-1/2 z-0 shadow-[0_0_15px_#dc2626]" />
-                    {[0, 1, 2, 3].map((step) => (
-                        <div key={step} className={`w-10 h-10 rounded-full border-2 flex items-center justify-center relative z-10 transition-all duration-700 ${currentStep === step ? 'bg-red-600 border-red-600 shadow-[0_0_20px_rgba(220,38,38,0.6)] scale-110' : (currentStep > step ? 'bg-black border-red-600 text-red-600' : 'bg-black border-zinc-800 text-zinc-800')}`}>{currentStep > step ? <Check className="w-5 h-5 stroke-[4px]" /> : <span className="text-xs font-black font-mono">{step + 1}</span>}</div>
-                    ))}
-                </div>
+            
+            {/* SCANLINE EFFECT */}
+            <div className="absolute inset-0 pointer-events-none z-50 opacity-[0.03] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]" />
+
+            {/* HUD BACKGROUND ELEMENTS */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-5">
+                <div className="absolute inset-0 bg-grid-moving" />
+                <div className="absolute top-40 left-10 text-[6px] font-mono text-lime-600 uppercase tracking-[0.5em] vertical-text">MISSION_BRIEFING_ACTIVE</div>
+                <div className="absolute bottom-40 right-10 text-[6px] font-mono text-lime-600 uppercase tracking-[0.5em] vertical-text rotate-180">COMMAND_CENTER_UPLINK</div>
             </div>
-            <div className="flex-1 px-8 pb-32 relative z-10 flex flex-col justify-center max-w-sm mx-auto w-full">
-                <AnimatePresence mode="wait">
-                    <MotionDiv key={currentStep} initial={{ opacity: 0, x: isRtl ? -40 : 40, filter: 'blur(10px)' }} animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }} exit={{ opacity: 0, x: isRtl ? 40 : -40, filter: 'blur(10px)' }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} className="bg-zinc-950/40 border border-white/5 rounded-[3rem] p-10 backdrop-blur-3xl shadow-[0_30px_100px_rgba(0,0,0,0.5)] relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-8 opacity-5"><Hexagon className="w-40 h-40 text-red-600" /></div>
-                        <div className={`mb-10 ${isRtl ? 'text-right' : 'text-left'}`}>
-                            <span className="text-[10px] font-black text-red-600 uppercase tracking-[0.4em] font-mono block mb-2 italic">ACCESS_STEP_0{currentStep + 1}</span>
-                            <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter leading-none">{currentStep === 0 && t.install_app}{currentStep === 1 && t.registration}{currentStep === 2 && t.activation_deposit}{currentStep === 3 && t.verify_account}</h2>
-                            <div className="h-0.5 w-10 bg-red-600/40 mt-3" />
+
+            {/* TOP BAR */}
+            <MotionDiv dir="ltr" className="fixed top-0 left-0 right-0 h-16 bg-zinc-950/80 border-b border-white/5 flex items-center justify-between px-6 z-[100] backdrop-blur-xl">
+                <div className="flex items-center gap-4">
+                    {onBack && (
+                        <button onClick={() => { playSound('click'); onBack(); }} className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-zinc-500 hover:text-white transition-all">
+                            <ChevronLeft className="w-5 h-5" />
+                        </button>
+                    )}
+                    <div className="flex flex-col">
+                        <h1 className="text-[11px] font-black text-white tracking-[0.3em] uppercase italic leading-none">DRAGON <span className="text-lime-400">VIP</span></h1>
+                        <span className="text-[6px] font-mono text-zinc-500 uppercase tracking-widest mt-1">Command Center</span>
+                    </div>
+                </div>
+                <button onClick={() => { playSound('toggle'); onLanguageChange(language === 'en' ? 'ar' : 'en'); }} className="h-9 px-4 rounded-lg bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-white/10 transition-colors">
+                    <Globe className="w-3.5 h-3.5 text-lime-400" />
+                    {language === 'en' ? 'ARABIC' : 'ENGLISH'}
+                </button>
+            </MotionDiv>
+
+            {/* MAIN CONTENT AREA */}
+            <div className="flex-1 overflow-y-auto pt-24 pb-32 px-6 relative z-10 custom-scrollbar">
+                <div className="max-w-sm mx-auto">
+                    
+                    {/* MISSION STATUS HEADER */}
+                    <div className="mb-8 flex items-end justify-between border-b border-white/5 pb-4">
+                        <div className="flex flex-col">
+                            <div className="flex items-center gap-2 mb-1">
+                                <div className="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse" />
+                                <span className="text-[8px] font-black text-lime-400 uppercase tracking-widest italic">MISSION_ACTIVE</span>
+                            </div>
+                            <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter leading-none">{isRtl ? "بروتوكول الوصول" : "ACCESS PROTOCOL"}</h2>
                         </div>
-                        <div className={`min-h-[200px] flex flex-col justify-center ${isRtl ? 'text-right' : 'text-left'}`}>
-                            {currentStep === 0 && (
-                                <>
-                                    <div className="flex items-center gap-6 mb-8 flex-row"><div className="w-16 h-16 rounded-2xl bg-black border border-white/10 p-1 shrink-0 overflow-hidden shadow-2xl"><img src={platformImg} className="w-full h-full object-cover rounded-xl" alt="" /></div><p className="text-[12px] text-zinc-400 font-medium leading-relaxed italic">{t.install_desc}</p></div>
-                                    <a href={platform === '1XBET' ? xbetDownloadUrl : melbetDownloadUrl} target="_blank" rel="noopener" className="w-full h-14 rounded-2xl bg-white text-black font-black text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-4 active:scale-[0.98] transition-all shadow-[0_15px_30px_rgba(255,255,255,0.1)]"><Download className="w-5 h-5" /> {t.install_btn}</a>
-                                </>
-                            )}
-                            {currentStep === 1 && (
-                                <>
-                                    <p className="text-[12px] text-zinc-400 mb-8 font-medium leading-relaxed italic">{t.reg_desc}</p>
-                                    <div onClick={handleCopy} className="bg-black/60 border border-white/5 p-6 rounded-[2rem] cursor-pointer flex items-center justify-between group hover:border-red-600/30 transition-all">
-                                        <div><span className="text-[8px] text-zinc-600 font-black uppercase block mb-1 tracking-widest italic">PROTOCOL_SYNC_ID</span><span className="text-2xl font-mono font-black text-white tracking-widest">{promoCode}</span></div>
-                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 ${copied ? 'bg-red-600 text-white' : 'bg-white/5 text-zinc-500 group-hover:text-red-600'}`}>{copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}</div>
+                        <div className="text-right">
+                            <span className="text-[6px] font-mono text-zinc-500 uppercase block mb-1">UPLINK_STABILITY</span>
+                            <div className="flex gap-0.5">
+                                {[...Array(5)].map((_, i) => (
+                                    <div key={i} className={`w-3 h-1 rounded-full ${i < 4 ? 'bg-lime-400' : 'bg-zinc-800'}`} />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* BENTO GRID */}
+                    <div className="grid grid-cols-6 gap-3">
+                        
+                        {/* NODE 01: INSTALL (Large) */}
+                        <MotionDiv 
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="col-span-6 bg-zinc-950 border border-white/5 rounded-3xl p-6 relative overflow-hidden group"
+                        >
+                            <div className="absolute top-0 right-0 p-4 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity">
+                                <Download className="w-32 h-32 text-lime-400" />
+                            </div>
+                            <div className="relative z-10">
+                                <div className="flex items-center justify-between mb-6">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-lg bg-lime-400/10 border border-lime-400/30 flex items-center justify-center text-[10px] font-black text-lime-400 italic">01</div>
+                                        <h3 className="text-[12px] font-black text-white uppercase italic tracking-wider">{t.install_app}</h3>
                                     </div>
-                                </>
-                            )}
-                            {currentStep === 2 && (
-                                <>
-                                    <p className="text-[12px] text-zinc-400 mb-8 font-medium leading-relaxed italic">{t.min_deposit}</p>
-                                    <div className="grid grid-cols-2 gap-4" dir="ltr">
-                                        <div className="bg-black/40 border border-white/5 p-6 rounded-[2rem] text-center backdrop-blur-md"><span className="text-[8px] text-zinc-600 font-black block mb-1 uppercase tracking-widest italic">BASE_USD</span><span className="text-2xl font-mono font-black text-white">$5.00</span></div>
-                                        <div className="bg-black/40 border border-white/5 p-6 rounded-[2rem] text-center backdrop-blur-md"><span className="text-[8px] text-zinc-600 font-black block mb-1 uppercase tracking-widest italic">BASE_EGP</span><span className="text-2xl font-mono font-black text-white">250</span></div>
+                                    <span className="text-[6px] font-mono text-zinc-600 uppercase tracking-widest">PHASE_INIT</span>
+                                </div>
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="w-14 h-14 rounded-xl border border-white/10 overflow-hidden shrink-0 shadow-2xl">
+                                        <img src={platformImg} className="w-full h-full object-cover" alt="" />
                                     </div>
-                                </>
-                            )}
-                            {currentStep === 3 && (
-                                <div className="space-y-6">
-                                    <div className="relative"><label className="text-[9px] text-zinc-600 uppercase font-black tracking-[0.2em] block mb-3 italic">{t.userid_label}</label><div className="relative"><Fingerprint className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-700" /><input type="tel" value={userId} onChange={handleUserIdChange} placeholder="000000000" className={`w-full bg-black/60 border-2 h-16 pl-14 pr-6 rounded-2xl text-white font-mono text-lg focus:outline-none transition-all ${errors.userId ? 'border-red-600/50' : 'border-white/5 focus:border-red-600/40'}`} /></div></div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="relative"><input type="file" id="scr" hidden onChange={handleFileChange} /><label htmlFor="scr" className={`aspect-square rounded-[2rem] border-2 border-dashed flex flex-col items-center justify-center transition-all cursor-pointer relative overflow-hidden ${errors.screenshot ? 'border-red-600 bg-red-600/5' : 'border-white/10 bg-black/40 hover:border-red-600/20'}`}>{previewUrl ? <img src={previewUrl} className="w-full h-full object-cover opacity-60" alt="" /> : <><Scan className="w-6 h-6 text-zinc-800" /><span className="text-[7px] text-zinc-700 font-black uppercase mt-2 tracking-tighter">RECEIPT</span></>}</label></div>
-                                        <div className="relative"><input type="file" id="prof" hidden onChange={handleProfileFileChange} /><label htmlFor="prof" className={`aspect-square rounded-[2rem] border-2 border-dashed flex flex-col items-center justify-center transition-all cursor-pointer relative overflow-hidden ${errors.profileScreenshot ? 'border-red-600 bg-red-600/5' : 'border-white/10 bg-black/40 hover:border-red-600/20'}`}>{profilePreviewUrl ? <img src={profilePreviewUrl} className="w-full h-full object-cover opacity-60" alt="" /> : <><Image className="w-6 h-6 text-zinc-800" /><span className="text-[7px] text-zinc-700 font-black uppercase mt-2 tracking-tighter">PROFILE</span></>}</label></div>
+                                    <p className="text-[10px] text-zinc-400 italic leading-relaxed">{t.install_desc}</p>
+                                </div>
+                                <a href={platform === '1XBET' ? xbetDownloadUrl : melbetDownloadUrl} target="_blank" rel="noopener" className="w-full h-12 rounded-xl bg-white text-black font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-[0.98] transition-all italic shadow-xl">
+                                    <Download className="w-4 h-4" /> {t.install_btn}
+                                </a>
+                            </div>
+                        </MotionDiv>
+
+                        {/* NODE 02: PROMO (Square) */}
+                        <MotionDiv 
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="col-span-3 bg-zinc-950 border border-white/5 rounded-3xl p-5 relative overflow-hidden group"
+                        >
+                            <div className="flex flex-col h-full justify-between">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="w-6 h-6 rounded-md bg-lime-400/10 border border-lime-400/30 flex items-center justify-center text-[8px] font-black text-lime-400 italic">02</div>
+                                    <span className="text-[5px] font-mono text-zinc-700 uppercase tracking-widest">SYNC</span>
+                                </div>
+                                <div onClick={handleCopy} className="bg-black/40 border border-white/5 p-3 rounded-xl cursor-pointer group/copy hover:border-lime-400/30 transition-all">
+                                    <span className="text-[6px] text-zinc-600 font-black uppercase block mb-1 tracking-widest">ENCRYPTION_KEY</span>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-lg font-mono font-black text-white tracking-widest">{promoCode}</span>
+                                        <div className={`w-6 h-6 rounded-md flex items-center justify-center transition-all ${copied ? 'bg-lime-400 text-black' : 'text-zinc-500 group-hover/copy:text-lime-400'}`}>
+                                            {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                                        </div>
                                     </div>
                                 </div>
-                            )}
+                            </div>
+                        </MotionDiv>
+
+                        {/* NODE 03: DEPOSIT (Square) */}
+                        <MotionDiv 
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="col-span-3 bg-zinc-950 border border-white/5 rounded-3xl p-5 relative overflow-hidden group"
+                        >
+                            <div className="flex flex-col h-full justify-between">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="w-6 h-6 rounded-md bg-lime-400/10 border border-lime-400/30 flex items-center justify-center text-[8px] font-black text-lime-400 italic">03</div>
+                                    <span className="text-[5px] font-mono text-zinc-700 uppercase tracking-widest">VAL</span>
+                                </div>
+                                <div className="space-y-2" dir="ltr">
+                                    <div className="flex justify-between items-center bg-black/40 px-3 py-1.5 rounded-lg border border-white/5">
+                                        <span className="text-[7px] font-mono text-zinc-600">USD</span>
+                                        <span className="text-[11px] font-mono font-black text-white">$5.00</span>
+                                    </div>
+                                    <div className="flex justify-between items-center bg-black/40 px-3 py-1.5 rounded-lg border border-white/5">
+                                        <span className="text-[7px] font-mono text-zinc-600">EGP</span>
+                                        <span className="text-[11px] font-mono font-black text-white">250</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </MotionDiv>
+
+                        {/* NODE 04: VERIFY (Wide) */}
+                        <MotionDiv 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="col-span-6 bg-zinc-950 border border-white/5 rounded-3xl p-6 relative overflow-hidden group"
+                        >
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-lime-400/10 border border-lime-400/30 flex items-center justify-center text-[10px] font-black text-lime-400 italic">04</div>
+                                    <h3 className="text-[12px] font-black text-white uppercase italic tracking-wider">{t.verify_account}</h3>
+                                </div>
+                                <span className="text-[6px] font-mono text-zinc-600 uppercase tracking-widest">PHASE_AUTH</span>
+                            </div>
+                            
+                            <div className="space-y-4">
+                                <div className="relative">
+                                    <label className="text-[7px] text-zinc-600 font-black uppercase tracking-widest block mb-2 italic">USER_MATRIX_ID</label>
+                                    <div className="relative">
+                                        <Fingerprint className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-lime-400/40" />
+                                        <input 
+                                            type="tel" 
+                                            value={userId} 
+                                            onChange={handleUserIdChange} 
+                                            placeholder="000000000" 
+                                            className={`w-full bg-black/60 border h-12 pl-12 pr-4 rounded-xl text-white font-mono text-sm focus:outline-none transition-all ${errors.userId ? 'border-lime-400/50' : 'border-white/5 focus:border-lime-400/40'}`} 
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="relative">
+                                        <input type="file" id="scr" hidden onChange={handleFileChange} />
+                                        <label htmlFor="scr" className={`h-24 rounded-2xl border border-dashed flex flex-col items-center justify-center transition-all cursor-pointer relative overflow-hidden ${errors.screenshot ? 'border-lime-400 bg-lime-400/5' : 'border-white/10 bg-black/40 hover:border-lime-400/20'}`}>
+                                            {previewUrl ? <img src={previewUrl} className="w-full h-full object-cover opacity-60" alt="" /> : <><Scan className="w-5 h-5 text-zinc-800" /><span className="text-[7px] text-zinc-700 font-black uppercase mt-2 tracking-tighter">RECEIPT</span></>}
+                                        </label>
+                                    </div>
+                                    <div className="relative">
+                                        <input type="file" id="prof" hidden onChange={handleProfileFileChange} />
+                                        <label htmlFor="prof" className={`h-24 rounded-2xl border border-dashed flex flex-col items-center justify-center transition-all cursor-pointer relative overflow-hidden ${errors.profileScreenshot ? 'border-lime-400 bg-lime-400/5' : 'border-white/10 bg-black/40 hover:border-lime-400/20'}`}>
+                                            {profilePreviewUrl ? <img src={profilePreviewUrl} className="w-full h-full object-cover opacity-60" alt="" /> : <><Image className="w-5 h-5 text-zinc-800" /><span className="text-[7px] text-zinc-700 font-black uppercase mt-2 tracking-tighter">PROFILE</span></>}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </MotionDiv>
+
+                        {/* MOCK SYSTEM LOGS */}
+                        <div className="col-span-6 bg-black/40 border border-white/5 rounded-2xl p-4 h-20 overflow-hidden relative">
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 pointer-events-none z-10" />
+                            <div className="text-[6px] font-mono text-zinc-600 space-y-1 animate-pulse">
+                                <p>[SYSTEM] INITIALIZING SECURITY CLEARANCE...</p>
+                                <p>[UPLINK] ESTABLISHING SECURE CONNECTION TO CORE...</p>
+                                <p>[AUTH] WAITING FOR USER MATRIX IDENTIFICATION...</p>
+                                <p>[SYNC] ENCRYPTION KEYS GENERATED SUCCESSFULLY.</p>
+                                <p>[LOG] MISSION_BRIEFING_LOADED_AT_{new Date().toLocaleTimeString()}</p>
+                            </div>
                         </div>
-                    </MotionDiv>
-                </AnimatePresence>
-                <div className="mt-10 flex gap-4">
-                    {currentStep > 0 && <button onClick={prevStep} className="w-16 h-16 rounded-[1.5rem] bg-zinc-950 border border-white/5 text-zinc-500 flex items-center justify-center active:scale-90 transition-all hover:text-white"><ArrowLeft className={`w-6 h-6 ${isRtl ? 'rotate-180' : ''}`} /></button>}
-                    {currentStep < 3 ? <button onClick={nextStep} className="flex-1 h-16 rounded-[1.5rem] bg-white text-black font-black text-xs tracking-[0.4em] uppercase flex items-center justify-center gap-4 shadow-[0_20px_40px_rgba(0,0,0,0.5)] active:scale-[0.98] transition-all italic"><span>{isRtl ? "المتابعة" : "NEXT STEP"}</span><ArrowRight className={`w-5 h-5 ${isRtl ? 'rotate-180' : ''}`} /></button> : <button onClick={validateAndSubmit} disabled={isSubmitting} className="flex-1 h-16 rounded-[1.5rem] bg-red-600 text-white font-black text-xs tracking-[0.4em] uppercase flex items-center justify-center gap-4 shadow-[0_20px_40px_rgba(220,38,38,0.3)] active:scale-[0.98] transition-all disabled:opacity-20 italic"><span>{isRtl ? "تأكيد الوصول" : "AUTHORIZE"}</span><ShieldCheck className="w-5 h-5" /></button>}
+                    </div>
+
+                    {/* INITIALIZE BUTTON */}
+                    <div className="pt-10">
+                        <button 
+                            onClick={validateAndSubmit} 
+                            disabled={isSubmitting} 
+                            className="group relative w-full h-16 rounded-2xl bg-lime-400 text-black font-black text-[12px] tracking-[0.4em] uppercase flex items-center justify-center gap-4 shadow-[0_20px_40px_rgba(163,230,53,0.3)] active:scale-[0.98] transition-all disabled:opacity-20 overflow-hidden italic"
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                            <span className="relative z-10">{isRtl ? "تأكيد الوصول" : "INITIALIZE UPLINK"}</span>
+                            <ShieldCheck className="w-6 h-6 relative z-10" />
+                        </button>
+                        
+                        <div className="flex justify-center gap-8 mt-6 opacity-30">
+                            <div className="flex items-center gap-2">
+                                <Terminal size={12} className="text-lime-400" />
+                                <span className="text-[7px] font-mono text-white uppercase">Encrypted</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Zap size={12} className="text-lime-400" />
+                                <span className="text-[7px] font-mono text-white uppercase">Verified</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <AnimatePresence>{isSubmitting && <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/98 backdrop-blur-3xl p-8"><MotionDiv initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full max-w-xs text-center"><div className="bg-zinc-950/50 border border-red-600/20 rounded-[4rem] p-12 shadow-[0_0_150px_rgba(220,38,38,0.15)] relative overflow-hidden"><div className="absolute top-0 left-0 right-0 h-1.5 bg-red-600/30" /><div className="flex items-center justify-center mb-10"><div className="w-20 h-20 rounded-3xl bg-black border border-red-600/20 flex items-center justify-center relative"><Terminal className="w-10 h-10 text-red-600 animate-pulse" /><div className="absolute inset-0 bg-red-600/5 blur-xl rounded-full animate-pulse" /></div></div><div className="space-y-3 mb-10 text-center"><h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em] italic">{statusText}</h3><div className="text-4xl font-mono font-black text-red-600 italic">{Math.round(overallProgress)}%</div></div><div className="h-2 w-full bg-zinc-900/50 rounded-full overflow-hidden mb-8 p-0.5"><MotionDiv className="h-full bg-red-600 rounded-full shadow-[0_0_20px_#dc2626]" style={{ width: `${overallProgress}%` }} /></div></div></MotionDiv></div>}</AnimatePresence>
+
+            {/* SUBMISSION OVERLAY */}
+            <AnimatePresence>
+                {isSubmitting && (
+                    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-[#050505]/98 backdrop-blur-3xl p-8">
+                        <MotionDiv initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full max-w-xs text-center">
+                            <div className="bg-zinc-950 border border-white/10 rounded-[3rem] p-10 shadow-2xl relative overflow-hidden">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-lime-400/30" />
+                                <div className="flex items-center justify-center mb-8">
+                                    <div className="w-16 h-16 rounded-2xl bg-black border border-lime-400/30 flex items-center justify-center relative">
+                                        <Terminal className="w-8 h-8 text-lime-400 animate-pulse" />
+                                        <div className="absolute inset-0 bg-lime-400/5 blur-xl rounded-full animate-pulse" />
+                                    </div>
+                                </div>
+                                <div className="space-y-3 mb-8 text-center">
+                                    <h3 className="text-[9px] font-black text-white uppercase tracking-[0.3em] italic">{statusText}</h3>
+                                    <div className="text-3xl font-mono font-black text-lime-400 italic">{Math.round(overallProgress)}%</div>
+                                </div>
+                                <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden p-[1px]">
+                                    <MotionDiv className="h-full bg-lime-400 rounded-full shadow-[0_0_15px_#a3e635]" style={{ width: `${overallProgress}%` }} />
+                                </div>
+                            </div>
+                        </MotionDiv>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            <style>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 0px;
+                }
+                .vertical-text {
+                    writing-mode: vertical-rl;
+                    text-orientation: mixed;
+                }
+            `}</style>
         </MotionDiv>
     );
 };

@@ -46,114 +46,189 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete, language
   }, []); 
 
   const isArabic = language === 'ar';
-  const logoUrl = "https://image2url.com/r2/default/images/1767391654654-34f1434f-a850-4fa8-808e-fce24d1fcf4e.jpg";
+  const logoUrl = "https://image2url.com/r2/default/images/1771685718404-0db562f8-2fce-4446-b376-7c92ec46acff.jpeg";
 
   return (
     <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center transition-all duration-1000 ease-in-out 
-      bg-black
+      bg-[#050505]
       ${exit ? 'opacity-0 scale-110 blur-xl' : 'opacity-100'} 
       ${isArabic ? 'font-ar' : ''}`}>
       
-      {/* ENHANCED BACKGROUND LIGHTING ANIMATION */}
+      {/* IMMERSIVE BACKGROUND HUD */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Animated Background Mesh */}
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.15)_0%,transparent_50%)]" />
+        {/* Scanning Grid */}
+        <div className="absolute inset-0 opacity-[0.03] bg-grid-moving" />
         
-        {/* Sweeping Light Beams */}
+        {/* Radial Vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)]" />
+
+        {/* Dynamic Red Pulses */}
         <MotionDiv 
           animate={{ 
-            x: ['-100%', '200%'],
-            rotate: [0, 15]
+            opacity: [0.05, 0.15, 0.05],
+            scale: [1, 1.1, 1],
           }}
-          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-y-0 w-[40%] bg-gradient-to-r from-transparent via-red-600/10 to-transparent skew-x-12 opacity-30 blur-2xl"
-        />
-        
-        <MotionDiv 
-          animate={{ 
-            opacity: [0.1, 0.2, 0.1],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{ duration: 5, repeat: Infinity }}
-          className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.1)_0%,transparent_70%)]"
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(163,230,53,0.2)_0%,transparent_70%)]"
         />
 
-        <Particles theme="dark" count={60} />
+        {/* Corner HUD Elements */}
+        <div className="absolute top-8 left-8 flex flex-col gap-1 opacity-20">
+          <div className="flex items-center gap-2">
+            <div className="w-1 h-1 bg-lime-400 animate-pulse" />
+            <span className="text-[8px] font-mono text-white tracking-widest uppercase">System_Status: Active</span>
+          </div>
+          <div className="text-[7px] font-mono text-zinc-500 uppercase">Kernel_Hash: 0x8F2A...9C1E</div>
+        </div>
+
+        <div className="absolute top-8 right-8 flex flex-col items-end gap-1 opacity-20">
+          <div className="flex items-center gap-2">
+            <span className="text-[8px] font-mono text-white tracking-widest uppercase">Encryption: AES-256</span>
+            <Shield size={8} className="text-lime-400" />
+          </div>
+          <div className="text-[7px] font-mono text-zinc-500 uppercase">Uptime: 99.99%</div>
+        </div>
+
+        <Particles theme="dark" count={40} />
       </div>
       
       <div className="relative z-10 flex flex-col items-center w-full px-6 flex-1 justify-center">
-        {/* Centered Logo Presentation */}
-        <div className="relative mb-10">
+        {/* Central Tech Core */}
+        <div className="relative mb-12">
           <MotionDiv 
-            initial={{ scale: 0.8, opacity: 0, rotate: -10 }}
-            animate={{ scale: 1, opacity: 1, rotate: 0 }}
-            transition={{ duration: 1.2, type: "spring" }}
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="relative"
           >
-            {/* Spinning decorative borders */}
-            <div className="absolute -inset-8 border border-red-600/20 rounded-full animate-[spin_15s_linear_infinite]" />
-            <div className="absolute -inset-12 border border-white/5 rounded-full animate-[spin_25s_linear_infinite_reverse]" />
-            <div className="absolute -inset-1 w-full h-full bg-red-600/20 blur-3xl rounded-full animate-pulse" />
+            {/* Rotating Tech Rings */}
+            <MotionDiv 
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute -inset-16 border border-dashed border-lime-400/20 rounded-full"
+            />
+            <MotionDiv 
+              animate={{ rotate: -360 }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+              className="absolute -inset-12 border border-lime-400/10 rounded-full"
+            />
+            
+            {/* Hexagonal Frame */}
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-lime-400/20 blur-2xl rounded-full animate-pulse" />
+              
+              <div className="relative w-40 h-40 flex items-center justify-center">
+                {/* Hexagon SVG Background */}
+                <svg className="absolute inset-0 w-full h-full text-zinc-900 fill-current drop-shadow-[0_0_20px_rgba(163,230,53,0.3)]" viewBox="0 0 100 100">
+                  <path d="M50 5 L90 25 L90 75 L50 95 L10 75 L10 25 Z" />
+                  <path d="M50 8 L87 27 L87 73 L50 92 L13 73 L13 27 Z" className="text-lime-400/20" />
+                </svg>
 
-            <div className="relative w-44 h-44 rounded-[2.5rem] overflow-hidden border border-white/10 bg-zinc-950 shadow-[0_20px_50px_rgba(220,38,38,0.2)]">
-                <img 
-                  src={logoUrl} 
-                  alt="Dragon Logo"
-                  className="w-full h-full object-cover select-none p-1.5 rounded-[2.3rem]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="relative w-28 h-28 overflow-hidden rounded-2xl border border-white/10 bg-black shadow-2xl">
+                  <img 
+                    src={logoUrl} 
+                    alt="Dragon Logo"
+                    className="w-full h-full object-cover select-none opacity-90"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-lime-400/20 via-transparent to-transparent" />
+                </div>
+              </div>
+
+              {/* Corner Accents */}
+              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-lime-400" />
+              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-lime-400" />
+              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-lime-400" />
+              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-lime-400" />
             </div>
           </MotionDiv>
         </div>
 
-        {/* Branding Title - Sized down and updated as requested */}
-        <div className="text-center space-y-4">
+        {/* Branding Title */}
+        <div className="text-center space-y-2">
           <MotionDiv 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className={`text-3xl font-black tracking-[0.2em] uppercase 
+            transition={{ delay: 0.8 }}
+            className={`text-4xl font-black tracking-[0.3em] uppercase 
               ${isArabic ? 'font-ar tracking-normal' : 'font-en'}
-              text-white`}
+              text-white relative`}
           >
-            DRAGON <span className="text-red-600 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">VIP</span>
+            <span className="relative z-10">DRAGON</span>
+            <span className="absolute -inset-1 text-lime-400/30 blur-sm select-none">DRAGON</span>
+          </MotionDiv>
+          
+          <MotionDiv
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+            className="flex items-center justify-center gap-4"
+          >
+            <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-lime-400/50" />
+            <span className="text-lime-400 font-bold tracking-[0.5em] text-xs uppercase drop-shadow-[0_0_8px_rgba(163,230,53,0.8)]">
+              VIP EDITION
+            </span>
+            <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-lime-400/50" />
           </MotionDiv>
         </div>
       </div>
 
-      {/* LOWER BOTTOM PROGRESS BAR - DIMENSIONS: 200x25, RED FILL, NO STROKE */}
-      <div className="pb-20 flex flex-col items-center gap-5">
-        <div className="relative w-[200px] h-[25px] bg-zinc-950/80 rounded-full border border-white/10 overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.5)] backdrop-blur-xl">
-          {/* Red Progress fill */}
-          <MotionDiv 
-            className="absolute inset-y-0 left-0 bg-red-600 transition-all duration-300 ease-out shadow-[0_0_15px_rgba(220,38,38,0.5)]"
-            style={{ width: `${progress}%` }}
-          />
-          
-          {/* Glass Overlay Reflective effect */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-          
-          {/* Center percentage indicator */}
-          <div className="absolute inset-0 flex items-center justify-center z-10">
-            <span className="text-[10px] font-black font-mono text-white tracking-widest drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-              {Math.floor(progress)}%
-            </span>
-          </div>
-
-          {/* Glowing scanner tip */}
-          <MotionDiv 
-            style={{ left: `${progress}%` }}
-            className="absolute inset-y-0 w-8 -ml-4 bg-white/20 blur-md z-20"
-          />
+      {/* REDESIGNED PROGRESS SECTION */}
+      <div className="pb-24 flex flex-col items-center gap-6 w-full max-w-[260px]">
+        <div className="w-full flex justify-between items-end mb-1">
+           <div className="flex flex-col">
+              <span className="text-[7px] font-black text-lime-400/60 uppercase tracking-[0.2em]">Core Engine</span>
+              <span className="text-[11px] font-black text-white uppercase tracking-widest">
+                {progress < 30 ? (isArabic ? 'جاري التحميل' : 'Loading') : 
+                 progress < 70 ? (isArabic ? 'تحليل البيانات' : 'Analyzing') : 
+                 (isArabic ? 'النظام جاهز' : 'System Ready')}
+              </span>
+           </div>
+           <div className="flex items-baseline gap-0.5">
+              <span className="text-xl font-black font-mono text-lime-400 leading-none">
+                {Math.floor(progress).toString().padStart(2, '0')}
+              </span>
+              <span className="text-[9px] font-bold text-zinc-600 uppercase">%</span>
+           </div>
         </div>
-        
-        <MotionDiv
-          animate={{ opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className={`text-[9px] font-black tracking-[0.5em] uppercase font-mono text-zinc-500`}
-        >
-          {isArabic ? 'جاري تهيئة المصفوفة' : 'Initializing Matrix'}
-        </MotionDiv>
+
+        <div className="relative w-full h-[14px] bg-zinc-950/50 border border-white/5 p-[3px] rounded-sm overflow-hidden backdrop-blur-sm">
+          {/* Background Track Pattern */}
+          <div className="absolute inset-0 opacity-[0.03]" 
+               style={{ backgroundImage: 'repeating-linear-gradient(90deg, #fff, #fff 1px, transparent 1px, transparent 10px)' }} />
+          
+          {/* The Progress Fill */}
+          <MotionDiv 
+            className="relative h-full bg-lime-400 rounded-sm shadow-[0_0_25px_rgba(163,230,53,0.5)]"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ type: "spring", stiffness: 50, damping: 15 }}
+          >
+            {/* Glossy overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent opacity-50" />
+            
+            {/* Leading Edge Sparkle */}
+            <MotionDiv 
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 0.5, repeat: Infinity }}
+              className="absolute top-0 right-0 bottom-0 w-[2px] bg-white shadow-[0_0_10px_#fff]" 
+            />
+          </MotionDiv>
+        </div>
+
+        {/* Status Indicators */}
+        <div className="w-full flex justify-between items-center px-1">
+           <div className="flex gap-1.5">
+              {[...Array(6)].map((_, i) => (
+                <div 
+                  key={i} 
+                  className={`w-1 h-1 rounded-full transition-colors duration-500 ${progress > (i+1)*16 ? 'bg-lime-400 shadow-[0_0_5px_rgba(163,230,53,0.8)]' : 'bg-zinc-800'}`} 
+                />
+              ))}
+           </div>
+           <span className="text-[8px] font-bold tracking-[0.2em] uppercase text-zinc-500 animate-pulse">
+             {isArabic ? 'تشفير آمن' : 'Secure Link Established'}
+           </span>
+        </div>
       </div>
 
       {/* Footer System Hash */}

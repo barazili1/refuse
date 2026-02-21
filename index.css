@@ -39,13 +39,13 @@ body::-webkit-scrollbar {
 .glass-panel {
   background: rgba(12, 12, 14, 0.7);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(57, 255, 20, 0.1);
 }
 
 .bg-grid-moving {
   background-image: 
-    linear-gradient(rgba(239, 68, 68, 0.05) 1px, transparent 1px), 
-    linear-gradient(90deg, rgba(239, 68, 68, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(57, 255, 20, 0.05) 1px, transparent 1px), 
+    linear-gradient(90deg, rgba(57, 255, 20, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 

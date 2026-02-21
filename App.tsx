@@ -117,7 +117,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-[#050505] text-white selection:bg-red-500/30 ${language === 'ar' ? 'font-ar' : 'font-en'}`}>
+    <div className={`min-h-screen bg-[#050505] text-white selection:bg-lime-500/30 ${language === 'ar' ? 'font-ar' : 'font-en'}`}>
       <AnimatePresence mode="wait">
         {isBooting ? (
           <SplashScreen key="splash" language={language} onComplete={() => setIsBooting(false)} />
