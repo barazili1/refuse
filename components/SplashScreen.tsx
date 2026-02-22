@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Particles } from './Particles';
 import { Language } from '../types';
-import { Shield, Zap, Terminal, Hexagon } from 'lucide-react';
+import { Shield } from 'lucide-react';
 
 const MotionDiv = motion.div as any;
 

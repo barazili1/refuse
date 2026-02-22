@@ -3,7 +3,6 @@ export const translations = {
   en: {
     riskLevel: "Risk Level",
     gridHeight: "Grid Height",
-    aiAnalysis: "AI Analysis",
     generatePrediction: "GENERATE PREDICTION",
     resync: "RE-SYNC",
     revealRotten: "Reveal Rotten Apples",
@@ -13,12 +12,7 @@ export const translations = {
     install_app: "INSTALL APP",
     install_desc: "Download the official app to establish a secure node connection with our servers.",
     install_btn: "DOWNLOAD APP",
-    registration: "REGISTRATION",
-    reg_desc: "Register a new account using the specialized protocol code for matrix synchronization.",
-    activation_deposit: "ACTIVATION DEPOSIT",
-    min_deposit: "A minimum deposit is required to calibrate the AI probability matrix for your account.",
     verify_account: "VERIFY ACCOUNT",
-    userid_label: "ACCOUNT ID",
     // Added missing keys
     scanning: "SCANNING...",
     systemIdle: "SYSTEM IDLE",
@@ -30,7 +24,6 @@ export const translations = {
   ar: {
     riskLevel: "مستوى المخاطرة",
     gridHeight: "ارتفاع الشبكة",
-    aiAnalysis: "تحليل الذكاء الاصطناعي",
     generatePrediction: "توليد التوقع",
     resync: "إعادة المزامنة",
     revealRotten: "كشف التفاح الفاسد",
@@ -40,12 +33,7 @@ export const translations = {
     install_app: "تثبيت التطبيق",
     install_desc: "قم بتنزيل التطبيق الرسمي لإنشاء اتصال آمن مع خوادمنا.",
     install_btn: "تنزيل التطبيق",
-    registration: "التسجيل",
-    reg_desc: "سجل حساباً جديداً باستخدام كود البروتول المخصص لمزامنة المصفوفة.",
-    activation_deposit: "إيداع التنشيط",
-    min_deposit: "مطلوب إيداع حد أدنى لمعايرة مصفوفة احتمالات الذكاء الاصطناعي لحسابك.",
     verify_account: "التحقق من الحساب",
-    userid_label: "معرف الحساب (ID)",
     // Added missing keys
     scanning: "جاري المسح...",
     systemIdle: "النظام في وضع الاستعداد",

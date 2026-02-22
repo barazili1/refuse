@@ -5,8 +5,6 @@ import {
     Copy, 
     Check, 
     Download, 
-    ArrowRight, 
-    ArrowLeft,
     ShieldCheck, 
     Fingerprint, 
     Terminal, 
@@ -14,7 +12,6 @@ import {
     ChevronLeft,
     Globe,
     Image,
-    Hexagon,
     Zap
 } from 'lucide-react';
 import { Language, Platform } from '../types';

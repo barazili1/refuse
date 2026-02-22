@@ -1,9 +1,5 @@
 
-import { GoogleGenAI } from "@google/genai";
 import { PredictionResult } from '../types';
-
-// Initialize the Google GenAI client with the API Key from environment variables
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const GRID_COLS = 5;
 

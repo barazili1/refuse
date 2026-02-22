@@ -17,10 +17,7 @@ import {
     Globe,
     ChevronLeft,
     ChevronDown,
-    Loader2,
-    SignalHigh,
-    Terminal,
-    Fingerprint
+    Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -54,28 +51,6 @@ const RainEffect: React.FC = () => {
   );
 };
 
-const DecryptText: React.FC<{ text: string; className?: string }> = ({ text, className }) => {
-  const [displayText, setDisplayText] = useState(text);
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
-
-  useEffect(() => {
-    let iteration = 0;
-    const interval = setInterval(() => {
-      setDisplayText(prev => 
-        text.split('').map((char, index) => {
-          if (index < iteration) return text[index];
-          return chars[Math.floor(Math.random() * chars.length)];
-        }).join('')
-      );
-      if (iteration >= text.length) clearInterval(interval);
-      iteration += 1 / 3;
-    }, 40);
-    return () => clearInterval(interval);
-  }, [text]);
-
-  return <span className={className}>{displayText}</span>;
-};
-
 interface AppleGameProps {
   onBack: () => void;
   accessKeyData: AccessKey | null;
@@ -88,7 +63,6 @@ export const AppleGame: React.FC<AppleGameProps> = ({ onBack, accessKeyData, lan
   const [gameState, setGameState] = useState<GameState>(GameState.IDLE);
   const [isUpdating, setIsUpdating] = useState(false);
   const [predictionProgress, setPredictionProgress] = useState(0); 
-  const [statusMessage, setStatusMessage] = useState("");
   const t = translations[language];
   const isRtl = language === 'ar';
   const [onlineUsersCount, setOnlineUsersCount] = useState(() => Math.floor(Math.random() * (1000 - 50 + 1)) + 50);
@@ -149,17 +123,14 @@ export const AppleGame: React.FC<AppleGameProps> = ({ onBack, accessKeyData, lan
     setGameState(GameState.ANALYZING);
     playSound('predict');
     setPredictionProgress(15);
-    setStatusMessage(isRtl ? "جاري الاتصال بنظام التوقع..." : "UPLINK ESTABLISHED...");
     await new Promise(r => setTimeout(r, 700));
     setPredictionProgress(45);
-    setStatusMessage(isRtl ? "تحليل مصفوفة الاحتمالات..." : "MATRIX SCANNING...");
     let realGridData = null;
     if (accessKeyData?.isAdminMode) {
         realGridData = await fetchAppleGridData(platform);
     }
     await new Promise(r => setTimeout(r, 1000));
     setPredictionProgress(80);
-    setStatusMessage(isRtl ? "استخراج المسار الذهبي..." : "OPTIMIZING PATH...");
     await new Promise(r => setTimeout(r, 800));
     let result: PredictionResult;
     if (realGridData) {
@@ -185,7 +156,6 @@ export const AppleGame: React.FC<AppleGameProps> = ({ onBack, accessKeyData, lan
         result = await generatePrediction(rowCount, difficulty === 'Pro' ? 'Hard' : 'Easy');
     }
     setPredictionProgress(100);
-    setStatusMessage(isRtl ? "اكتمل التحليل" : "DECRYPTION COMPLETE");
     playSound('success');
     setTimeout(() => {
         setGameState(GameState.PREDICTED);
@@ -227,7 +197,6 @@ export const AppleGame: React.FC<AppleGameProps> = ({ onBack, accessKeyData, lan
   };
 
   const isAnalyzing = gameState === GameState.ANALYZING;
-  const riskPercentage = difficulty === 'Easy' ? 24 : 88;
 
   return (
     <div className={`flex flex-col h-full relative pt-0 select-none bg-black overflow-hidden ${isRtl ? 'font-ar' : 'font-en'}`}>

@@ -8,7 +8,6 @@ import {
 import { 
   Check, 
   ChevronRight, 
-  Hexagon, 
   Terminal,
   Globe,
   ShieldCheck,
