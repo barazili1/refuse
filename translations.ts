@@ -20,10 +20,6 @@ export const translations = {
     verify_account: "VERIFY ACCOUNT",
     userid_label: "ACCOUNT ID",
     // Added missing keys
-    minesAi: "MINES AI",
-    safetyGrid: "SAFETY GRID",
-    totalMines: "TOTAL MINES",
-    confidence: "CONFIDENCE",
     scanning: "SCANNING...",
     systemIdle: "SYSTEM IDLE",
     prediction: "PREDICTION",
@@ -51,10 +47,6 @@ export const translations = {
     verify_account: "التحقق من الحساب",
     userid_label: "معرف الحساب (ID)",
     // Added missing keys
-    minesAi: "ذكاء الألغام",
-    safetyGrid: "شبكة الأمان",
-    totalMines: "إجمالي الألغام",
-    confidence: "الثقة",
     scanning: "جاري المسح...",
     systemIdle: "النظام في وضع الاستعداد",
     prediction: "توقع",

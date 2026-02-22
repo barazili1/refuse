@@ -8,13 +8,6 @@ export interface PredictionResult {
   gridData?: boolean[][];
 }
 
-// Added MinesPredictionResult interface for Mines game
-export interface MinesPredictionResult {
-  safeSpots: number[];
-  confidence: number;
-  analysis: string;
-}
-
 export enum GameState {
   IDLE = 'IDLE',
   ANALYZING = 'ANALYZING',

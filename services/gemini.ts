@@ -1,6 +1,6 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { PredictionResult, MinesPredictionResult } from '../types';
+import { PredictionResult } from '../types';
 
 // Initialize the Google GenAI client with the API Key from environment variables
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -45,28 +45,5 @@ export const generatePrediction = async (rowCount: number, difficulty: string): 
     analysis: getRandomAnalysis(),
     id: crypto.randomUUID(),
     timestamp: Date.now(),
-  };
-};
-
-// Added generateMinesPrediction for Mines game support
-export const generateMinesPrediction = async (mineCount: number): Promise<MinesPredictionResult> => {
-  // Simulate AI processing
-  await new Promise(r => setTimeout(r, 1200));
-
-  const totalCells = 25;
-  const safeSpotsCount = Math.max(3, 10 - Math.floor(mineCount / 2));
-  const safeSpots: number[] = [];
-  
-  while (safeSpots.length < safeSpotsCount) {
-    const r = Math.floor(Math.random() * totalCells);
-    if (!safeSpots.includes(r)) {
-      safeSpots.push(r);
-    }
-  }
-
-  return {
-    safeSpots,
-    confidence: Math.floor(Math.random() * (99 - 85) + 85),
-    analysis: "Probability matrix bypassed. Safety nodes identified in the grid cluster."
   };
 };
