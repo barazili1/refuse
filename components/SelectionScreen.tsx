@@ -65,7 +65,7 @@ const RainEffect: React.FC = () => {
 };
 
 export const SelectionScreen: React.FC<SelectionScreenProps> = ({ onSelect, language, onLanguageChange }) => {
-  const [selected, setSelected] = useState<Platform>('1XBET');
+  const [selected, setSelected] = useState<Platform>('MELBET');
   const [isConnecting, setIsConnecting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [activeSteps, setActiveSteps] = useState<number[]>([]);
@@ -75,9 +75,9 @@ export const SelectionScreen: React.FC<SelectionScreenProps> = ({ onSelect, lang
 
   const platforms = [
     {
-      id: '1XBET' as Platform,
-      name: '1xBet',
-      img: 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766500879248-4e7a13ac-b97d-4a9b-8d80-8ed58e40c847.jpeg',
+      id: 'MELBET' as Platform,
+      name: 'Melbet',
+      img: 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766501545744-4b13c58a-2947-489e-b7e5-9c15372aa331.jpg',
       code: 'NODE_01'
     }
   ];

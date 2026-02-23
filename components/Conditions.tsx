@@ -20,7 +20,6 @@ import { translations } from '../translations';
 
 const MotionDiv = motion.div as any;
 
-const xbetDownloadUrl = "https://reffpa.com/L?tag=d_2845435m_27409c_&site=2845435&ad=27409";
 const melbetDownloadUrl = "https://melbet.com/mobile/"; 
 
 const RainEffect: React.FC = () => {
@@ -69,10 +68,8 @@ export const Conditions: React.FC<{
     const [overallProgress, setOverallProgress] = useState(0);
     const [statusText, setStatusText] = useState("UPLINK_INITIALIZING");
 
-    const platformImg = platform === '1XBET' 
-        ? 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766500879248-4e7a13ac-b97d-4a9b-8d80-8ed58e40c847.jpeg'
-        : 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766501545744-4b13c58a-2947-489e-b7e5-9c15372aa331.jpg';
-    const promoCode = platform === '1XBET' ? 'V8S' : 'TOO3';
+    const platformImg = 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766501545744-4b13c58a-2947-489e-b7e5-9c15372aa331.jpg';
+    const promoCode = 'TOO3';
 
     const handleCopy = () => {
         playSound('toggle');
@@ -213,7 +210,7 @@ export const Conditions: React.FC<{
                                     </div>
                                     <p className="text-[10px] text-zinc-400 italic leading-relaxed">{t.install_desc}</p>
                                 </div>
-                                <a href={platform === '1XBET' ? xbetDownloadUrl : melbetDownloadUrl} target="_blank" rel="noopener" className="w-full h-12 rounded-xl bg-white text-black font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-[0.98] transition-all italic shadow-xl">
+                                <a href={melbetDownloadUrl} target="_blank" rel="noopener" className="w-full h-12 rounded-xl bg-white text-black font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-[0.98] transition-all italic shadow-xl">
                                     <Download className="w-4 h-4" /> {t.install_btn}
                                 </a>
                             </div>

@@ -15,7 +15,7 @@ export enum GameState {
   ERROR = 'ERROR'
 }
 
-export type Platform = '1XBET';
+export type Platform = 'MELBET';
 export type ViewState = 'APPLE' | 'SELECTION' | 'CONDITIONS';
 export type Language = 'ar' | 'en';
 

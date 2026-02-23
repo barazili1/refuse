@@ -15,8 +15,8 @@ export const App: React.FC = () => {
   
   const [platform, setPlatform] = useState<Platform>(() => {
     try {
-      return (localStorage.getItem('selected_platform') as Platform) || '1XBET';
-    } catch { return '1XBET'; }
+      return (localStorage.getItem('selected_platform') as Platform) || 'MELBET';
+    } catch { return 'MELBET'; }
   });
 
   const [accessKeyData, setAccessKeyData] = useState<AccessKey | null>(() => {
