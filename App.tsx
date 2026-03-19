@@ -15,8 +15,8 @@ export const App: React.FC = () => {
   
   const [platform, setPlatform] = useState<Platform>(() => {
     try {
-      return (localStorage.getItem('selected_platform') as Platform) || 'MELBET';
-    } catch { return 'MELBET'; }
+      return (localStorage.getItem('selected_platform') as Platform) || '1XBET';
+    } catch { return '1XBET'; }
   });
 
   const [accessKeyData, setAccessKeyData] = useState<AccessKey | null>(() => {
@@ -117,7 +117,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-[#050505] text-white selection:bg-lime-500/30 ${language === 'ar' ? 'font-ar' : 'font-en'}`}>
+    <div className={`min-h-screen bg-black text-white selection:bg-lime-500/30 overflow-hidden relative ${language === 'ar' ? 'font-ar' : 'font-en'}`}>
       <AnimatePresence mode="wait">
         {isBooting ? (
           <SplashScreen key="splash" language={language} onComplete={() => setIsBooting(false)} />
@@ -126,10 +126,10 @@ export const App: React.FC = () => {
             key="main-app"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="max-w-md mx-auto relative flex flex-col min-h-screen bg-[#050505]"
+            className="max-w-md mx-auto relative flex flex-col min-h-screen bg-transparent z-10"
           >
             <AnimatePresence mode="wait">
-                <MotionDiv key={view} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 flex flex-col">
+                <MotionDiv key={view} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: "easeOut" }} className="flex-1 flex flex-col">
                     {renderContent()}
                 </MotionDiv>
             </AnimatePresence>
