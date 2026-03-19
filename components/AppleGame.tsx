@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid } from './Grid';
 import { generatePrediction } from '../services/gemini';
 import { fetchAppleGridData, updateAppleGridData } from '../services/database';

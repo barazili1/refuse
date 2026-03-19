@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Platform, 
@@ -11,7 +11,6 @@ import {
   Terminal,
   Globe,
   ShieldCheck,
-  Cpu,
   Loader2,
   Zap
 } from 'lucide-react';
@@ -99,7 +98,7 @@ export const SelectionScreen: React.FC<SelectionScreenProps> = ({ onSelect, lang
               </div>
               <div className="flex flex-col">
                 <h1 className="text-[11px] font-black text-white tracking-[0.3em] uppercase italic leading-none">
-                  DRAGON <span className="text-amber-500/70">VIP</span>
+                  NINJA <span className="text-amber-500/70">VIP</span>
                 </h1>
                 <span className="text-[6px] font-mono text-zinc-500 uppercase tracking-widest mt-1">Version 4.5.1 Secure</span>
               </div>
@@ -205,7 +204,7 @@ export const SelectionScreen: React.FC<SelectionScreenProps> = ({ onSelect, lang
                       </div>
                     </div>
                     <h4 className="text-xl font-black text-white uppercase tracking-[0.2em] italic">{isRtl ? "جاري الربط" : "ESTABLISHING LINK"}</h4>
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest mt-2">Protocol: DRAGON_VIP_v4</span>
+                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest mt-2">Protocol: NINJA_VIP_v4</span>
                   </div>
 
                   <div className="space-y-4 mb-10">

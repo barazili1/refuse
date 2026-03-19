@@ -8,10 +8,9 @@ const MotionDiv = motion.div as any;
 interface SplashScreenProps {
   onComplete: () => void;
   language?: Language;
-  theme?: 'dark' | 'light';
 }
 
-export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete, language = 'en', theme = 'dark' }) => {
+export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete, language = 'en' }) => {
   const [progress, setProgress] = useState(0);
   const [exit, setExit] = useState(false);
   const onCompleteRef = useRef(onComplete);
@@ -71,7 +70,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete, language
           <div className="relative w-40 h-40 overflow-hidden rounded-[3rem] border border-amber-500/30 bg-black shadow-[0_0_60px_rgba(245,158,11,0.1)]">
             <img 
               src={logoUrl} 
-              alt="Dragon Logo"
+              alt="Ninja Logo"
               className="w-full h-full object-cover select-none transform hover:scale-105 transition-transform duration-1000"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -107,7 +106,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete, language
           className="text-center"
         >
           <h1 className="text-2xl font-black text-white tracking-[0.5em] uppercase italic mb-2">
-            DRAGON <span className="text-amber-500">VIP</span>
+            NINJA <span className="text-amber-500">VIP</span>
           </h1>
           <div className="h-[1px] w-20 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent mx-auto mb-4" />
           <p className="text-[9px] font-mono text-amber-500/60 uppercase tracking-[0.4em] font-bold">Elite Matrix Intelligence</p>
