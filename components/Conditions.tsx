@@ -23,7 +23,7 @@ import { translations } from '../translations';
 const MotionDiv = motion.div as any;
 
 const oneXBetDownloadUrl = "https://1xbet.com/mobile/"; 
-const melbetDownloadUrl = "https://melbet.com/mobile/"; 
+const melbetDownloadUrl = "https://1xbet.com/mobile/"; 
 
 export const Conditions: React.FC<{ 
     onComplete: (isAdmin: boolean, userId: string) => void; 
@@ -45,9 +45,9 @@ export const Conditions: React.FC<{
 
     const platformImg = platform === '1XBET' 
         ? 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766500879248-4e7a13ac-b97d-4a9b-8d80-8ed58e40c847.jpeg'
-        : 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766501545744-4b13c58a-2947-489e-b7e5-9c15372aa331.jpg';
+        : 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766500879248-4e7a13ac-b97d-4a9b-8d80-8ed58e40c847.jpeg';
     
-    const promoCode = platform === '1XBET' ? 'V8S' : 'TOO3';
+    const promoCode = platform === '1XBET' ? 'Abdo7' : 'Abdo7';
     const downloadUrl = platform === '1XBET' ? oneXBetDownloadUrl : melbetDownloadUrl;
 
     const handleCopy = () => {
