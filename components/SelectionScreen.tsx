@@ -37,12 +37,12 @@ export const SelectionScreen: React.FC<SelectionScreenProps> = ({ onSelect, lang
   const platforms = [
     {
       id: '1XBET' as Platform,
-      name: '1xBet',
+      name: '1XBET V1',
       img: 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766500879248-4e7a13ac-b97d-4a9b-8d80-8ed58e40c847.jpeg',
       code: 'NODE_01'
     },
     {
-      id: '1XBET' as Platform,
+      id: '1XBET1' as Platform,
       name: '1XBET V2',
       img: 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766500879248-4e7a13ac-b97d-4a9b-8d80-8ed58e40c847.jpeg',
       code: 'NODE_02'
