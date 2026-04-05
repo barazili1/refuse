@@ -95,7 +95,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete, language
             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             className="absolute -bottom-6 -left-6 w-12 h-12 rounded-xl bg-black/80 backdrop-blur-md border border-amber-500/40 p-2 shadow-2xl"
           >
-            <img src="https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766501545744-4b13c58a-2947-489e-b7e5-9c15372aa331.jpg" className="w-full h-full object-contain rounded-lg" alt="melbet" />
+            <img src="https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766500879248-4e7a13ac-b97d-4a9b-8d80-8ed58e40c847.jpeg" className="w-full h-full object-contain rounded-lg" alt="melbet" />
           </MotionDiv>
         </MotionDiv>
 
