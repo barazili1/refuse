@@ -2,36 +2,38 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
+    ShieldCheck, 
+    Download, 
     Copy, 
     Check, 
-    Download, 
-    ShieldCheck, 
     Terminal, 
     Scan, 
+    Image, 
     ChevronLeft,
     Globe,
-    Image,
     Zap,
     Lock,
     ArrowRight,
-    ExternalLink
+    ExternalLink,
+    Upload,
+    Fingerprint,
+    Activity,
+    Shield
 } from 'lucide-react';
 import { Language, Platform } from '../types';
 import { playSound } from '../services/audio';
 import { translations } from '../translations';
 
-const MotionDiv = motion.div as any;
-
 const oneXBetDownloadUrl = "https://1xbet.com/mobile/"; 
-const melbetDownloadUrl = "https://1xbet.com/mobile/"; 
+const pro1BetDownloadUrl = "https://pro1bet.com/mobile/"; 
 
-export const Conditions: React.FC<{ 
+export function Conditions({ onComplete, onBack, language, onLanguageChange, platform }: { 
     onComplete: (isAdmin: boolean, userId: string) => void; 
     onBack?: () => void; 
     language: Language; 
     onLanguageChange: (lang: Language) => void; 
     platform: Platform; 
-}> = ({ onComplete, onBack, language, onLanguageChange, platform }) => {
+}) {
     const isRtl = language === 'ar';
     const t = translations[language];
     const [copied, setCopied] = useState(false);
@@ -43,12 +45,8 @@ export const Conditions: React.FC<{
     const [overallProgress, setOverallProgress] = useState(0);
     const [statusText, setStatusText] = useState("UPLINK_INITIALIZING");
 
-    const platformImg = platform === '1XBET' 
-        ? 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766500879248-4e7a13ac-b97d-4a9b-8d80-8ed58e40c847.jpeg'
-        : 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766500879248-4e7a13ac-b97d-4a9b-8d80-8ed58e40c847.jpeg';
-    
-    const promoCode = platform === '1XBET' ? 'Abdo7' : 'Abdo7';
-    const downloadUrl = platform === '1XBET' ? oneXBetDownloadUrl : melbetDownloadUrl;
+    const promoCode = platform === '1XBET' ? 'Abdo7' : 'PRO1';
+    const downloadUrl = platform === '1XBET' ? oneXBetDownloadUrl : pro1BetDownloadUrl;
 
     const handleCopy = () => {
         playSound('toggle');
@@ -85,21 +83,27 @@ export const Conditions: React.FC<{
         playSound('click');
         const trimmedId = userId.trim();
         const isLengthValid = trimmedId.length >= 8 && trimmedId.length <= 15;
-        const newErrors = { userId: !trimmedId, userIdLength: !isLengthValid && !!trimmedId, screenshot: !previewUrl, profileScreenshot: !profilePreviewUrl };
+        const newErrors = { 
+            userId: !trimmedId, 
+            userIdLength: !isLengthValid && !!trimmedId, 
+            screenshot: !previewUrl, 
+            profileScreenshot: !profilePreviewUrl 
+        };
         setErrors(newErrors);
 
         if (!newErrors.userId && !newErrors.userIdLength && !newErrors.screenshot && !newErrors.profileScreenshot) {
             setIsSubmitting(true);
-            setStatusText("SYSTEM UPLINK...");
+            setStatusText("ESTABLISHING SECURE TUNNEL...");
             let isAdminVerified = trimmedId === '1726354290';
-            const duration = 4000;
+            const duration = 5000;
             const increment = 100 / (duration / 30);
             const timer = setInterval(() => {
                 setOverallProgress(prev => {
                     const next = prev + increment;
-                    if (next >= 33 && next < 66) setStatusText("VERIFYING DEPOSIT...");
-                    if (next >= 66 && next < 95) setStatusText("VERIFYING ID...");
-                    if (next >= 100) { setStatusText("AUTHENTICATED"); clearInterval(timer); return 100; }
+                    if (next >= 25 && next < 50) setStatusText("VERIFYING DEPOSIT STATUS...");
+                    if (next >= 50 && next < 75) setStatusText("VALIDATING IDENTITY...");
+                    if (next >= 75 && next < 95) setStatusText("SYNCING WITH PRO1BET NODES...");
+                    if (next >= 100) { setStatusText("ACCESS GRANTED"); clearInterval(timer); return 100; }
                     return next;
                 });
             }, 30);
@@ -108,280 +112,344 @@ export const Conditions: React.FC<{
     };
 
     return (
-        <div className={`flex flex-col h-full bg-[#050505] relative overflow-hidden ${isRtl ? 'font-ar' : 'font-en'}`}>
-            {/* Background Decorative Elements */}
-            <div className="absolute inset-0 z-0">
-                <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-amber-500/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-amber-500/5 rounded-full blur-[120px]" />
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5" />
+        <div className={`flex flex-col h-full bg-[#020202] relative overflow-hidden ${isRtl ? 'font-ar' : 'font-en'}`}>
+            {/* Elite Background Elements */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="absolute top-[-15%] left-[-10%] w-[80%] h-[80%] bg-red-600/[0.04] rounded-full blur-[180px]" />
+                <div className="absolute bottom-[-15%] right-[-10%] w-[70%] h-[70%] bg-red-600/[0.04] rounded-full blur-[180px]" />
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.05),transparent_70%)]" />
             </div>
 
-            {/* Top Bar */}
-            <div className="fixed top-0 left-0 right-0 z-[100] h-16 bg-black/80 backdrop-blur-md border-b border-amber-500/10 flex items-center justify-between px-6">
+            {/* Futuristic Header */}
+            <motion.div 
+                initial={{ y: -100 }}
+                animate={{ y: 0 }}
+                className="fixed top-0 left-0 right-0 z-[100] h-20 bg-black/40 backdrop-blur-2xl border-b border-red-600/10 flex items-center justify-between px-8"
+            >
                 <button 
                     onClick={() => { playSound('click'); onBack?.(); }}
-                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-amber-500/20 hover:border-amber-500/50 transition-all"
+                    className="w-11 h-11 rounded-2xl bg-white/[0.03] border border-white/5 flex items-center justify-center text-zinc-400 hover:text-red-600 hover:border-red-600/30 transition-all active:scale-90"
                 >
-                    <ChevronLeft className={`w-5 h-5 ${isRtl ? 'rotate-180' : ''}`} />
+                    <ChevronLeft className={`w-6 h-6 ${isRtl ? 'rotate-180' : ''}`} />
                 </button>
                 
-                <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-black border border-amber-500/20 overflow-hidden">
-                        <img 
-                            src="https://image2url.com/r2/default/images/1771685718404-0db562f8-2fce-4446-b376-7c92ec46acff.jpeg" 
-                            alt="Logo" 
-                            className="w-full h-full object-cover"
-                        />
+                <div className="flex flex-col items-center">
+                    <div className="flex items-center gap-2.5 mb-1">
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.8)]" />
+                        <span className="text-[9px] font-black text-red-600 uppercase tracking-[0.4em] italic">SECURITY_CLEARANCE</span>
                     </div>
-                    <span className="text-[10px] font-black text-white tracking-[0.2em] uppercase italic">NINJA <span className="text-amber-500">VIP</span></span>
+                    <h1 className="text-xs font-black text-white uppercase tracking-[0.2em]">NINJA <span className="text-red-600">VIO</span> ACCESS</h1>
                 </div>
 
                 <button 
                     onClick={() => { playSound('toggle'); onLanguageChange?.(language === 'en' ? 'ar' : 'en'); }}
-                    className="h-10 px-4 rounded-xl bg-amber-500/5 border border-amber-500/10 text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2"
+                    className="h-11 px-5 rounded-2xl bg-white/[0.03] border border-white/5 text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2 hover:bg-red-600/10 transition-all"
                 >
-                    <Globe className="w-3.5 h-3.5 text-amber-500" />
+                    <Globe className="w-4 h-4 text-red-600" />
                     {language === 'en' ? 'AR' : 'EN'}
                 </button>
-            </div>
+            </motion.div>
 
             {/* MAIN CONTENT AREA */}
-            <div className="flex-1 overflow-y-auto pt-24 pb-32 px-6 relative z-10 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto pt-28 pb-36 px-8 relative z-10 custom-scrollbar">
                 <div className="max-w-md mx-auto">
                     
-                    {/* HEADER SECTION */}
-                    <MotionDiv 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-center mb-10"
+                    {/* MISSION IDENTITY */}
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="text-center mb-14"
                     >
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 mb-4">
-                            <Lock className="w-3 h-3 text-amber-500" />
-                            <span className="text-[8px] font-black text-amber-500 uppercase tracking-[0.2em]">{isRtl ? "تأمين الاتصال" : "SECURE UPLINK"}</span>
-                        </div>
-                        <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter mb-2">
-                            {isRtl ? "بروتوكول التحقق" : "VERIFICATION PROTOCOL"}
-                        </h2>
-                        <p className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-medium">
-                            {isRtl ? "أكمل الخطوات التالية للوصول إلى المصفوفة" : "COMPLETE STEPS TO ACCESS THE MATRIX"}
-                        </p>
-                    </MotionDiv>
-
-                    {/* STEPS LIST - VERTICAL LAYOUT */}
-                    <div className="space-y-6">
-                        
-                        {/* STEP 01: INSTALL */}
-                        <MotionDiv 
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="relative"
-                        >
-                            <div className="absolute -left-3 top-0 bottom-0 w-[1px] bg-gradient-to-b from-amber-500/50 via-amber-500/10 to-transparent" />
-                            <div className="bg-zinc-900/40 backdrop-blur-sm border border-white/5 rounded-3xl p-6 hover:border-amber-500/20 transition-all group">
-                                <div className="flex items-start gap-5">
-                                    <div className="w-12 h-12 rounded-2xl bg-black border border-amber-500/20 flex items-center justify-center text-sm font-black text-amber-500 shrink-0 shadow-[0_0_20px_rgba(245,158,11,0.05)]">01</div>
-                                    <div className="flex-1">
-                                        <h3 className="text-xs font-black text-white uppercase tracking-widest mb-2 flex items-center gap-2">
-                                            {t.install_app}
-                                            <Zap className="w-3 h-3 text-amber-500 animate-pulse" />
-                                        </h3>
-                                        <p className="text-[10px] text-zinc-400 leading-relaxed mb-5 italic">{t.install_desc}</p>
-                                        <a href={downloadUrl} target="_blank" rel="noopener" className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-amber-500 text-black font-black text-[10px] uppercase tracking-widest hover:bg-amber-400 transition-all active:scale-95 shadow-lg shadow-amber-500/20">
-                                            <Download className="w-4 h-4" /> {t.install_btn}
-                                            <ExternalLink className="w-3 h-3 opacity-50" />
-                                        </a>
-                                    </div>
+                        <div className="relative inline-block mb-8">
+                            <div className="absolute -inset-6 bg-red-600/10 rounded-full blur-2xl animate-pulse" />
+                            <div className="relative w-28 h-28 rounded-[2.5rem] bg-black border border-red-600/30 p-1 flex items-center justify-center overflow-hidden shadow-[0_0_40px_rgba(220,38,38,0.15)]">
+                                <img 
+                                    src={platform === '1XBET' 
+                                        ? 'https://pub-35faf01d0bac49249f374189fd3a24d9.r2.dev/images/1766500879248-4e7a13ac-b97d-4a9b-8d80-8ed58e40c847.jpeg'
+                                        : 'https://www.image2url.com/r2/default/images/1776873423891-0ea7e3eb-77d4-4c33-9fe1-5d63aab53607.jpeg'
+                                    } 
+                                    alt="Platform" 
+                                    className="w-full h-full object-cover rounded-[2.2rem] opacity-60"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                                <div className="absolute bottom-3 flex flex-col items-center">
+                                    <span className="text-[8px] font-black text-white uppercase tracking-[0.3em]">{platform}</span>
+                                    <div className="w-8 h-0.5 bg-red-600 mt-1 rounded-full" />
                                 </div>
                             </div>
-                        </MotionDiv>
+                        </div>
+                        <h2 className="text-4xl font-black text-white uppercase italic tracking-tighter mb-4 leading-none">
+                            {isRtl ? "بروتوكول النخبة" : "ELITE_PROTOCOL"}
+                        </h2>
+                        <p className="text-[11px] text-zinc-500 uppercase tracking-[0.2em] font-medium max-w-[280px] mx-auto leading-relaxed">
+                            {isRtl ? "أكمل مصفوفة التحقق لتفعيل خوارزمية PRO1BET" : "COMPLETE THE VERIFICATION MATRIX TO ACTIVATE PRO1BET ALGORITHM"}
+                        </p>
+                    </motion.div>
+
+                    {/* STEPS LIST - VERTICAL TIMELINE */}
+                    <div className="space-y-8 relative">
+                        {/* Timeline Line */}
+                        <div className="absolute left-[27px] top-4 bottom-4 w-[1px] bg-gradient-to-b from-amber-500/50 via-amber-500/10 to-transparent" />
+
+                        {/* STEP 01: INSTALL */}
+                        <motion.div 
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="relative flex gap-6"
+                        >
+                            <div className="relative z-10 w-14 h-14 rounded-2xl bg-black border border-red-600/30 flex items-center justify-center text-lg font-black text-red-600 shrink-0 shadow-[0_0_20px_rgba(220,38,38,0.1)]">
+                                01
+                                <div className="absolute -inset-1 rounded-2xl border border-red-600/10 animate-pulse" />
+                            </div>
+                            <div className="flex-1 bg-zinc-900/30 backdrop-blur-md border border-white/[0.03] rounded-[2rem] p-7 hover:border-red-600/20 transition-all group">
+                                <h3 className="text-sm font-black text-white uppercase tracking-widest mb-3 flex items-center gap-3">
+                                    {t.install_app}
+                                    <Zap className="w-4 h-4 text-red-600 animate-pulse" />
+                                </h3>
+                                <p className="text-[11px] text-zinc-400 leading-relaxed mb-6 italic">{t.install_desc}</p>
+                                <a href={downloadUrl} target="_blank" rel="noopener" className="inline-flex items-center gap-4 px-7 py-3.5 rounded-2xl bg-red-600 text-black font-black text-[11px] uppercase tracking-widest hover:bg-red-500 transition-all active:scale-95 shadow-[0_10px_30px_rgba(220,38,38,0.2)]">
+                                    <Download className="w-4 h-4" /> {t.install_btn}
+                                    <ExternalLink className="w-3.5 h-3.5 opacity-50" />
+                                </a>
+                            </div>
+                        </motion.div>
 
                         {/* STEP 02: PROMO CODE */}
-                        <MotionDiv 
+                        <motion.div 
                             initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="relative"
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                            className="relative flex gap-6"
                         >
-                            <div className="absolute -left-3 top-0 bottom-0 w-[1px] bg-amber-500/10" />
-                            <div className="bg-zinc-900/40 backdrop-blur-sm border border-white/5 rounded-3xl p-6 hover:border-amber-500/20 transition-all">
-                                <div className="flex items-start gap-5">
-                                    <div className="w-12 h-12 rounded-2xl bg-black border border-amber-500/20 flex items-center justify-center text-sm font-black text-amber-500 shrink-0">02</div>
-                                    <div className="flex-1">
-                                        <h3 className="text-xs font-black text-white uppercase tracking-widest mb-2">{isRtl ? "كود التفعيل" : "ACTIVATION CODE"}</h3>
-                                        <p className="text-[10px] text-zinc-400 leading-relaxed mb-4 italic">
-                                            {isRtl ? "استخدم الكود التالي عند التسجيل لتفعيل ميزات VIP" : "USE THIS CODE DURING REGISTRATION TO ACTIVATE VIP FEATURES"}
-                                        </p>
-                                        <div onClick={handleCopy} className="cursor-pointer group/copy relative">
-                                            <div className="flex items-center justify-between bg-black/60 p-4 rounded-2xl border border-amber-500/10 group-hover/copy:border-amber-500/30 transition-all">
-                                                <div className="flex flex-col">
-                                                    <span className="text-[7px] text-zinc-500 font-black uppercase tracking-[0.3em] mb-1">PROMO_CODE</span>
-                                                    <span className="text-xl font-mono font-black text-white tracking-widest">{promoCode}</span>
-                                                </div>
-                                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${copied ? 'bg-green-500/20 text-green-500' : 'bg-amber-500/10 text-amber-500'}`}>
-                                                    {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-                                                </div>
-                                            </div>
-                                            {copied && (
-                                                <MotionDiv initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-8 right-0 text-[8px] font-black text-green-500 uppercase">COPIED_TO_CLIPBOARD</MotionDiv>
-                                            )}
+                            <div className="relative z-10 w-14 h-14 rounded-2xl bg-black border border-amber-500/10 flex items-center justify-center text-lg font-black text-amber-500 shrink-0">
+                                02
+                            </div>
+                            <div className="flex-1 bg-zinc-900/30 backdrop-blur-md border border-white/[0.03] rounded-[2rem] p-7 hover:border-amber-500/20 transition-all">
+                                <h3 className="text-sm font-black text-white uppercase tracking-widest mb-3">{isRtl ? "كود التفعيل" : "ACTIVATION_KEY"}</h3>
+                                <p className="text-[11px] text-zinc-400 leading-relaxed mb-6 italic">
+                                    {isRtl ? "استخدم الكود التالي عند التسجيل لتفعيل ميزات VIP" : "USE THIS CODE DURING REGISTRATION TO ACTIVATE VIP FEATURES"}
+                                </p>
+                                <div onClick={handleCopy} className="cursor-pointer group/copy relative">
+                                    <div className="flex items-center justify-between bg-black/60 p-5 rounded-2xl border border-red-600/10 group-hover/copy:border-red-600/30 transition-all">
+                                        <div className="flex flex-col">
+                                            <span className="text-[8px] text-zinc-500 font-black uppercase tracking-[0.4em] mb-1.5">PROMO_CODE</span>
+                                            <span className="text-2xl font-mono font-black text-white tracking-[0.2em]">{promoCode}</span>
+                                        </div>
+                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all ${copied ? 'bg-green-500/20 text-green-500' : 'bg-red-600/10 text-red-600'}`}>
+                                            {copied ? <Check className="w-6 h-6" /> : <Copy className="w-6 h-6" />}
                                         </div>
                                     </div>
+                                    <AnimatePresence>
+                                        {copied && (
+                                            <motion.div 
+                                                initial={{ opacity: 0, y: 10 }} 
+                                                animate={{ opacity: 1, y: 0 }} 
+                                                exit={{ opacity: 0 }}
+                                                className="absolute -top-8 right-0 text-[9px] font-black text-green-500 uppercase tracking-widest"
+                                            >
+                                                KEY_COPIED_SUCCESSFULLY
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                             </div>
-                        </MotionDiv>
+                        </motion.div>
 
                         {/* STEP 03: DEPOSIT */}
-                        <MotionDiv 
+                        <motion.div 
                             initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.3 }}
-                            className="relative"
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.2 }}
+                            className="relative flex gap-6"
                         >
-                            <div className="absolute -left-3 top-0 bottom-0 w-[1px] bg-amber-500/10" />
-                            <div className="bg-zinc-900/40 backdrop-blur-sm border border-white/5 rounded-3xl p-6 hover:border-amber-500/20 transition-all">
-                                <div className="flex items-start gap-5">
-                                    <div className="w-12 h-12 rounded-2xl bg-black border border-amber-500/20 flex items-center justify-center text-sm font-black text-amber-500 shrink-0">03</div>
-                                    <div className="flex-1">
-                                        <h3 className="text-xs font-black text-white uppercase tracking-widest mb-2">{isRtl ? "الإيداع الأول" : "INITIAL DEPOSIT"}</h3>
-                                        <p className="text-[10px] text-zinc-400 leading-relaxed mb-4 italic">
-                                            {isRtl ? "قم بإيداع الحد الأدنى لتفعيل خوارزمية التوقع" : "DEPOSIT MINIMUM AMOUNT TO ACTIVATE PREDICTION ALGORITHM"}
-                                        </p>
-                                        <div className="flex items-center gap-4 bg-black/40 p-4 rounded-2xl border border-amber-500/5">
-                                            <div className="flex flex-col">
-                                                <span className="text-[7px] text-zinc-500 font-black uppercase tracking-[0.3em] mb-1">MIN_THRESHOLD</span>
-                                                <span className="text-lg font-mono font-black text-amber-500">$5 / 250 EGP</span>
-                                            </div>
-                                            <div className="ml-auto w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                                        </div>
+                            <div className="relative z-10 w-14 h-14 rounded-2xl bg-black border border-red-600/10 flex items-center justify-center text-lg font-black text-red-600 shrink-0">
+                                03
+                            </div>
+                            <div className="flex-1 bg-zinc-900/30 backdrop-blur-md border border-white/[0.03] rounded-[2rem] p-7 hover:border-red-600/20 transition-all">
+                                <h3 className="text-sm font-black text-white uppercase tracking-widest mb-3">{isRtl ? "عتبة الإيداع" : "FUNDING_THRESHOLD"}</h3>
+                                <p className="text-[11px] text-zinc-400 leading-relaxed mb-6 italic">
+                                    {isRtl ? "قم بإيداع الحد الأدنى لتفعيل خوارزمية التوقع المتقدمة" : "DEPOSIT MINIMUM AMOUNT TO ACTIVATE ADVANCED PREDICTION ALGORITHM"}
+                                </p>
+                                <div className="flex items-center gap-5 bg-black/40 p-5 rounded-2xl border border-red-600/5">
+                                    <div className="w-10 h-10 rounded-xl bg-red-600/10 flex items-center justify-center">
+                                        <Zap className="w-5 h-5 text-red-600" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-[8px] text-zinc-500 font-black uppercase tracking-[0.4em] mb-1">MIN_REQUIREMENT</span>
+                                        <span className="text-xl font-mono font-black text-red-600">$5 / 250 EGP</span>
+                                    </div>
+                                    <div className="ml-auto flex gap-1">
+                                        {[...Array(3)].map((_, i) => (
+                                            <div key={i} className="w-1 h-4 rounded-full bg-red-600/20" />
+                                        ))}
                                     </div>
                                 </div>
                             </div>
-                        </MotionDiv>
+                        </motion.div>
 
                         {/* STEP 04: VERIFICATION */}
-                        <MotionDiv 
+                        <motion.div 
                             initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.4 }}
-                            className="relative"
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3 }}
+                            className="relative flex gap-6"
                         >
-                            <div className="absolute -left-3 top-0 bottom-0 w-[1px] bg-amber-500/10" />
-                            <div className="bg-zinc-900/40 backdrop-blur-sm border border-white/5 rounded-3xl p-6 hover:border-amber-500/20 transition-all">
-                                <div className="flex items-start gap-5">
-                                    <div className="w-12 h-12 rounded-2xl bg-black border border-amber-500/20 flex items-center justify-center text-sm font-black text-amber-500 shrink-0">04</div>
-                                    <div className="flex-1">
-                                        <h3 className="text-xs font-black text-white uppercase tracking-widest mb-4">{t.verify_account}</h3>
-                                        
-                                        <div className="space-y-4">
-                                            <div className="relative group/input">
-                                                <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                                                    <Terminal className="w-4 h-4 text-zinc-600 group-focus-within/input:text-amber-500 transition-colors" />
-                                                </div>
-                                                <input 
-                                                    type="tel" 
-                                                    value={userId} 
-                                                    onChange={handleUserIdChange} 
-                                                    placeholder="ENTER_USER_ID" 
-                                                    className={`w-full bg-black/60 border h-12 pl-12 pr-4 rounded-2xl text-white font-mono text-sm focus:outline-none transition-all ${errors.userId || errors.userIdLength ? 'border-red-500/50 bg-red-500/5' : 'border-white/5 focus:border-amber-500/30'}`} 
-                                                />
-                                                {(errors.userId || errors.userIdLength) && (
-                                                    <span className="text-[7px] text-red-500 font-black uppercase mt-1 block px-2">INVALID_ID_FORMAT</span>
-                                                )}
-                                            </div>
-                                            
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <label className={`h-28 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center transition-all cursor-pointer relative overflow-hidden group/upload ${errors.screenshot ? 'border-red-500/30 bg-red-500/5' : 'border-white/5 bg-black/60 hover:border-amber-500/20'}`}>
-                                                    <input type="file" hidden onChange={handleFileChange} />
-                                                    {previewUrl ? (
-                                                        <img src={previewUrl} className="w-full h-full object-cover opacity-80" alt="" />
-                                                    ) : (
-                                                        <>
-                                                            <Scan className="w-6 h-6 text-zinc-700 group-hover/upload:text-amber-500 transition-colors mb-2" />
-                                                            <span className="text-[7px] text-zinc-500 font-black uppercase tracking-widest">RECEIPT_SCAN</span>
-                                                        </>
-                                                    )}
-                                                </label>
-                                                <label className={`h-28 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center transition-all cursor-pointer relative overflow-hidden group/upload ${errors.profileScreenshot ? 'border-red-500/30 bg-red-500/5' : 'border-white/5 bg-black/60 hover:border-amber-500/20'}`}>
-                                                    <input type="file" hidden onChange={handleProfileFileChange} />
-                                                    {profilePreviewUrl ? (
-                                                        <img src={profilePreviewUrl} className="w-full h-full object-cover opacity-80" alt="" />
-                                                    ) : (
-                                                        <>
-                                                            <Image className="w-6 h-6 text-zinc-700 group-hover/upload:text-amber-500 transition-colors mb-2" />
-                                                            <span className="text-[7px] text-zinc-500 font-black uppercase tracking-widest">PROFILE_SCAN</span>
-                                                        </>
-                                                    )}
-                                                </label>
-                                            </div>
+                            <div className="relative z-10 w-14 h-14 rounded-2xl bg-black border border-red-600/10 flex items-center justify-center text-lg font-black text-red-600 shrink-0">
+                                04
+                            </div>
+                            <div className="flex-1 bg-zinc-900/30 backdrop-blur-md border border-white/[0.03] rounded-[2rem] p-7 hover:border-red-600/20 transition-all">
+                                <h3 className="text-sm font-black text-white uppercase tracking-widest mb-6">{isRtl ? "مزامنة الهوية" : "IDENTITY_UPLINK"}</h3>
+                                
+                                <div className="space-y-6">
+                                    {/* User ID Input */}
+                                    <div className="relative group/input">
+                                        <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+                                            <Terminal className="w-5 h-5 text-zinc-600 group-focus-within/input:text-red-600 transition-colors" />
                                         </div>
+                                        <input 
+                                            type="tel" 
+                                            value={userId} 
+                                            onChange={handleUserIdChange} 
+                                            placeholder="ENTER_USER_ID" 
+                                            className={`w-full bg-black/60 border h-14 pl-14 pr-5 rounded-2xl text-white font-mono text-sm focus:outline-none transition-all ${errors.userId || errors.userIdLength ? 'border-red-500/50 bg-red-500/5' : 'border-white/5 focus:border-red-600/40'}`} 
+                                        />
+                                        {(errors.userId || errors.userIdLength) && (
+                                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[9px] text-red-500 font-black uppercase mt-2 px-2 flex items-center gap-2">
+                                                <Shield className="w-3 h-3" /> INVALID_ID_FORMAT
+                                            </motion.div>
+                                        )}
+                                    </div>
+                                    
+                                    {/* File Uploads */}
+                                    <div className="grid grid-cols-2 gap-5">
+                                        <label className={`h-32 rounded-[2rem] border-2 border-dashed flex flex-col items-center justify-center transition-all cursor-pointer relative overflow-hidden group/upload ${errors.screenshot ? 'border-red-500/30 bg-red-500/5' : 'border-white/5 bg-black/60 hover:border-amber-500/30'}`}>
+                                            <input type="file" hidden onChange={handleFileChange} />
+                                            {previewUrl ? (
+                                                <div className="relative w-full h-full">
+                                                    <img src={previewUrl} className="w-full h-full object-cover opacity-70" alt="" />
+                                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                                        <Check className="w-8 h-8 text-amber-500" />
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <div className="w-10 h-10 rounded-xl bg-white/[0.02] flex items-center justify-center mb-2 group-hover/upload:bg-red-600/10 transition-colors">
+                                                        <Scan className="w-5 h-5 text-zinc-600 group-hover/upload:text-red-600 transition-colors" />
+                                                    </div>
+                                                    <span className="text-[8px] text-zinc-500 font-black uppercase tracking-[0.2em]">RECEIPT_SCAN</span>
+                                                </>
+                                            )}
+                                        </label>
+
+                                        <label className={`h-32 rounded-[2rem] border-2 border-dashed flex flex-col items-center justify-center transition-all cursor-pointer relative overflow-hidden group/upload ${errors.profileScreenshot ? 'border-red-500/30 bg-red-500/5' : 'border-white/5 bg-black/60 hover:border-red-600/30'}`}>
+                                            <input type="file" hidden onChange={handleProfileFileChange} />
+                                            {profilePreviewUrl ? (
+                                                <div className="relative w-full h-full">
+                                                    <img src={profilePreviewUrl} className="w-full h-full object-cover opacity-70" alt="" />
+                                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                                        <Check className="w-8 h-8 text-red-600" />
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <div className="w-10 h-10 rounded-xl bg-white/[0.02] flex items-center justify-center mb-2 group-hover/upload:bg-red-600/10 transition-colors">
+                                                        <Image className="w-5 h-5 text-zinc-600 group-hover/upload:text-red-600 transition-colors" />
+                                                    </div>
+                                                    <span className="text-[8px] text-zinc-500 font-black uppercase tracking-[0.2em]">PROFILE_SCAN</span>
+                                                </>
+                                            )}
+                                        </label>
                                     </div>
                                 </div>
                             </div>
-                        </MotionDiv>
+                        </motion.div>
                     </div>
 
                     {/* INITIALIZE BUTTON */}
-                    <MotionDiv 
+                    <motion.div 
                         initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
-                        className="pt-12"
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="pt-16"
                     >
                         <button 
                             onClick={validateAndSubmit} 
                             disabled={isSubmitting} 
-                            className="group relative w-full h-16 rounded-[2rem] bg-amber-500 text-black font-black text-xs tracking-[0.3em] uppercase flex items-center justify-center gap-4 active:scale-[0.98] transition-all disabled:opacity-20 shadow-[0_10px_30px_rgba(245,158,11,0.2)]"
+                            className="group relative w-full h-20 rounded-[2.5rem] bg-red-600 text-black font-black text-sm tracking-[0.5em] uppercase flex items-center justify-center gap-5 active:scale-[0.98] transition-all disabled:opacity-20 shadow-[0_20px_60px_rgba(220,38,38,0.3)] overflow-hidden italic"
                         >
-                            <span className="relative z-10">{isRtl ? "تأكيد الوصول للمصفوفة" : "INITIALIZE MATRIX UPLINK"}</span>
-                            <ShieldCheck className="w-5 h-5 relative z-10 group-hover:scale-110 transition-transform" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                            <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.3)_50%,transparent_75%)] bg-[length:250%_250%] animate-[shimmer_3s_infinite]" />
+                            <span className="relative z-10">{isRtl ? "تفعيل مصفوفة PRO1BET" : "ACTIVATE_PRO1BET_MATRIX"}</span>
+                            <ShieldCheck className="w-6 h-6 relative z-10 group-hover:scale-110 transition-transform" />
                         </button>
                         
-                        <div className="mt-8 flex justify-center gap-8 opacity-30">
-                            <div className="flex flex-col items-center gap-1">
-                                <ShieldCheck size={14} className="text-amber-500" />
-                                <span className="text-[6px] font-mono text-amber-500 uppercase tracking-widest">End-to-End</span>
+                        <div className="mt-12 flex justify-center gap-12 opacity-30">
+                            <div className="flex flex-col items-center gap-2">
+                                <Lock size={18} className="text-red-600" />
+                                <span className="text-[8px] font-mono text-red-600 uppercase tracking-[0.3em]">Encrypted</span>
                             </div>
-                            <div className="flex flex-col items-center gap-1">
-                                <Terminal size={14} className="text-amber-500" />
-                                <span className="text-[6px] font-mono text-amber-500 uppercase tracking-widest">Verified</span>
+                            <div className="flex flex-col items-center gap-2">
+                                <Fingerprint size={18} className="text-red-600" />
+                                <span className="text-[8px] font-mono text-red-600 uppercase tracking-[0.3em]">Verified</span>
                             </div>
-                            <div className="flex flex-col items-center gap-1">
-                                <Zap size={14} className="text-amber-500" />
-                                <span className="text-[6px] font-mono text-amber-500 uppercase tracking-widest">High-Speed</span>
+                            <div className="flex flex-col items-center gap-2">
+                                <Activity size={18} className="text-red-600" />
+                                <span className="text-[8px] font-mono text-red-600 uppercase tracking-[0.3em]">Real-Time</span>
                             </div>
                         </div>
-                    </MotionDiv>
+                    </motion.div>
                 </div>
             </div>
 
             {/* SUBMISSION OVERLAY */}
             <AnimatePresence>
                 {isSubmitting && (
-                    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/98 backdrop-blur-3xl p-8">
-                        <div className="w-full max-w-xs text-center">
-                            <div className="bg-zinc-950/80 border border-amber-500/20 rounded-[3rem] p-10 relative overflow-hidden shadow-[0_0_50px_rgba(245,158,11,0.1)]">
-                                <div className="absolute top-0 left-0 w-full h-1 bg-amber-500" />
-                                <div className="flex items-center justify-center mb-8">
-                                    <div className="w-20 h-20 rounded-3xl bg-black border border-amber-500/30 flex items-center justify-center relative">
-                                        <Terminal className="w-10 h-10 text-amber-500" />
-                                        <div className="absolute inset-0 rounded-3xl border border-amber-500/50 animate-ping opacity-20" />
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[200] flex items-center justify-center bg-black/98 backdrop-blur-3xl p-8"
+                    >
+                        <div className="w-full max-w-sm text-center">
+                            <motion.div 
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="bg-[#050505] border border-red-600/20 rounded-[4rem] p-12 relative overflow-hidden shadow-[0_0_100px_rgba(220,38,38,0.2)]"
+                            >
+                                <div className="absolute top-0 left-0 w-full h-1.5 bg-zinc-900 overflow-hidden">
+                                    <motion.div 
+                                        className="h-full bg-red-600"
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${overallProgress}%` }}
+                                    />
+                                </div>
+                                <div className="flex items-center justify-center mb-10">
+                                    <div className="w-24 h-24 rounded-[2.5rem] bg-black border border-red-600/30 flex items-center justify-center relative">
+                                        <Terminal className="w-12 h-12 text-red-600" />
+                                        <div className="absolute -inset-4 rounded-[3rem] border border-red-600/20 animate-ping opacity-20" />
                                     </div>
                                 </div>
-                                <div className="space-y-3 mb-8 text-center">
-                                    <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em] italic">{statusText}</h3>
-                                    <div className="text-4xl font-mono font-black text-amber-500 italic">{Math.round(overallProgress)}%</div>
+                                <div className="space-y-4 mb-10 text-center">
+                                    <h3 className="text-[11px] font-black text-white uppercase tracking-[0.4em] italic h-8">{statusText}</h3>
+                                    <div className="text-5xl font-mono font-black text-red-600 italic">{Math.round(overallProgress)}%</div>
                                 </div>
-                                <div className="h-2 w-full bg-zinc-900 rounded-full overflow-hidden p-[1px]">
-                                    <div className="h-full bg-amber-500 rounded-full transition-all duration-300 ease-out" style={{ width: `${overallProgress}%` }} />
+                                <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden">
+                                    <motion.div 
+                                        className="h-full bg-red-600 shadow-[0_0_20px_rgba(220,38,38,0.6)]" 
+                                        initial={{ width: 0 }} 
+                                        animate={{ width: `${overallProgress}%` }} 
+                                    />
                                 </div>
-                                <div className="mt-8 text-[7px] font-mono text-zinc-600 uppercase tracking-[0.4em] animate-pulse">
+                                <div className="mt-10 text-[8px] font-mono text-zinc-600 uppercase tracking-[0.5em] animate-pulse">
                                   ESTABLISHING_SECURE_HANDSHAKE...
                                 </div>
-                            </div>
+                            </motion.div>
                         </div>
-                    </div>
+                    </motion.div>
                 )}
             </AnimatePresence>
 
@@ -389,7 +457,11 @@ export const Conditions: React.FC<{
                 .custom-scrollbar::-webkit-scrollbar {
                     width: 0px;
                 }
+                @keyframes shimmer {
+                    0% { background-position: -200% 0; }
+                    100% { background-position: 200% 0; }
+                }
             `}</style>
         </div>
     );
-};
+}

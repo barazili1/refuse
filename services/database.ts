@@ -4,8 +4,11 @@ import { Platform } from '../types';
 const BASE_URL = "https://evoioi-default-rtdb.europe-west1.firebasedatabase.app";
 
 export const fetchAppleGridData = async (platform: Platform): Promise<boolean[][] | null> => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
   try {
-    const response = await fetch(`${BASE_URL}/m11.json`);
+    const response = await fetch(`${BASE_URL}/m11.json`, { signal: controller.signal });
+    clearTimeout(timeoutId);
     if (!response.ok) return null;
     const data = await response.json();
     if (!data) return null;

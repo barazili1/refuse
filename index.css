@@ -43,47 +43,47 @@ body::-webkit-scrollbar {
 .glass-panel {
   background: rgba(12, 12, 14, 0.7);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(163, 230, 53, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.1);
 }
 
 .bg-grid-moving {
   background-image: 
-    linear-gradient(rgba(163, 230, 53, 0.05) 1px, transparent 1px), 
-    linear-gradient(90deg, rgba(163, 230, 53, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(239, 68, 68, 0.05) 1px, transparent 1px), 
+    linear-gradient(90deg, rgba(239, 68, 68, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
 .neon-glow {
-  box-shadow: 0 0 15px rgba(163, 230, 53, 0.4), 0 0 30px rgba(163, 230, 53, 0.2);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.4), 0 0 30px rgba(239, 68, 68, 0.2);
 }
 
 .neon-glow-strong {
-  box-shadow: 0 0 20px rgba(163, 230, 53, 0.6), 0 0 40px rgba(163, 230, 53, 0.3);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6), 0 0 40px rgba(239, 68, 68, 0.3);
 }
 
 .neon-text {
-  text-shadow: 0 0 8px rgba(163, 230, 53, 0.8), 0 0 15px rgba(163, 230, 53, 0.4);
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.8), 0 0 15px rgba(239, 68, 68, 0.4);
 }
 
 .neon-text-strong {
-  text-shadow: 0 0 12px rgba(163, 230, 53, 1), 0 0 25px rgba(163, 230, 53, 0.6);
+  text-shadow: 0 0 12px rgba(239, 68, 68, 1), 0 0 25px rgba(239, 68, 68, 0.6);
 }
 
 .neon-border {
-  border-color: rgba(163, 230, 53, 0.5);
-  box-shadow: inset 0 0 10px rgba(163, 230, 53, 0.2), 0 0 10px rgba(163, 230, 53, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.2), 0 0 10px rgba(239, 68, 68, 0.2);
 }
 
 .neon-border-strong {
-  border-color: rgba(163, 230, 53, 0.8);
-  box-shadow: inset 0 0 15px rgba(163, 230, 53, 0.4), 0 0 20px rgba(163, 230, 53, 0.4);
+  border-color: rgba(239, 68, 68, 0.8);
+  box-shadow: inset 0 0 15px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.4);
 }
 
 .scanline {
   width: 100%;
   height: 100px;
   z-index: 100;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(163, 230, 53, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(239, 68, 68, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
   opacity: 0.1;
   position: fixed;
   bottom: 100%;

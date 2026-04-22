@@ -5,12 +5,12 @@ import { AppleGame } from './components/AppleGame';
 import { SplashScreen } from './components/SplashScreen';
 import { SelectionScreen } from './components/SelectionScreen';
 import { Conditions } from './components/Conditions';
+import { GameSelection } from './components/GameSelection';
+import { CrashGame } from './components/CrashGame';
 import { ViewState, AccessKey, Language, Platform } from './types';
 import { playSound } from './services/audio';
 
-const MotionDiv = motion.div as any;
-
-export const App: React.FC = () => {
+export function App() {
   const [isBooting, setIsBooting] = useState(true);
   
   const [platform, setPlatform] = useState<Platform>(() => {
@@ -53,8 +53,8 @@ export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>(() => {
     try {
         const saved = localStorage.getItem('selected_platform');
-        // If they already picked a platform, jump to the game, else selection
-        return saved ? 'APPLE' : 'SELECTION';
+        // If they already picked a platform, jump to the game selection, else selection
+        return saved ? 'GAME_SELECTION' : 'SELECTION';
     } catch { return 'SELECTION'; }
   });
 
@@ -81,7 +81,7 @@ export const App: React.FC = () => {
       createdAt: Date.now(),
       isAdminMode: isAdmin
     });
-    setView('APPLE');
+    setView('GAME_SELECTION');
   };
 
   const handleSignOut = () => {
@@ -107,8 +107,32 @@ export const App: React.FC = () => {
       );
     }
 
+    if (view === 'GAME_SELECTION') {
+        return (
+            <GameSelection 
+                platform={platform} 
+                language={language} 
+                onLanguageChange={handleLanguageChange} 
+                onSelect={(v) => setView(v)}
+                onBack={() => setView('CONDITIONS')}
+            />
+        );
+    }
+
+    if (view === 'CRASH') {
+        return (
+            <CrashGame 
+                onBack={() => setView('GAME_SELECTION')} 
+                accessKeyData={accessKeyData} 
+                language={language} 
+                onLanguageChange={handleLanguageChange} 
+                platform={platform} 
+            />
+        );
+    }
+
     return <AppleGame 
-      onBack={handleSignOut} 
+      onBack={() => setView('GAME_SELECTION')} 
       accessKeyData={accessKeyData} 
       language={language} 
       onLanguageChange={handleLanguageChange} 
@@ -117,25 +141,25 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-black text-white selection:bg-lime-500/30 overflow-hidden relative ${language === 'ar' ? 'font-ar' : 'font-en'}`}>
+    <div className={`min-h-screen bg-black text-white selection:bg-red-500/30 overflow-hidden relative ${language === 'ar' ? 'font-ar' : 'font-en'}`}>
       <AnimatePresence mode="wait">
         {isBooting ? (
           <SplashScreen key="splash" language={language} onComplete={() => setIsBooting(false)} />
         ) : (
-          <MotionDiv 
+          <motion.div 
             key="main-app"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="max-w-md mx-auto relative flex flex-col min-h-screen bg-transparent z-10"
           >
             <AnimatePresence mode="wait">
-                <MotionDiv key={view} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: "easeOut" }} className="flex-1 flex flex-col">
+                <motion.div key={view} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: "easeOut" }} className="flex-1 flex flex-col">
                     {renderContent()}
-                </MotionDiv>
+                </motion.div>
             </AnimatePresence>
-          </MotionDiv>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
-};
+}
