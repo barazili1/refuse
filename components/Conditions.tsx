@@ -45,7 +45,7 @@ export function Conditions({ onComplete, onBack, language, onLanguageChange, pla
     const [overallProgress, setOverallProgress] = useState(0);
     const [statusText, setStatusText] = useState("UPLINK_INITIALIZING");
 
-    const promoCode = platform === '1XBET' ? 'Abdo7' : 'TOO1';
+    const promoCode = platform === '1XBET' ? 'Abdo7' : 'PRO1';
     const downloadUrl = platform === '1XBET' ? oneXBetDownloadUrl : pro1BetDownloadUrl;
 
     const handleCopy = () => {
